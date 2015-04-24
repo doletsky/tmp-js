@@ -130,8 +130,11 @@ body {
     padding-left: 80%;
     position: absolute;
     width: 20%;
-    z-index: 999;
+    /*z-index: 999;*/
     overflow-y: scroll;
+}
+#objContainer div {
+    z-index: 999;
 }
 
 .clear{

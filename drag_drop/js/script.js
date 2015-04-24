@@ -18,14 +18,19 @@ $(document).ready(function(){
 
     $('.droppable').droppable({
         drop: function(event, ui) {
-            ui.draggable.css('position','fixed');
-            $(this).attr('rating','false');
-            ui.draggable.offset({top:$(this).offset().top, left:$(this).offset().left});
+            $(this).html(ui.draggable.html());
+            $(this).addClass('draggable');
+            $(this).addClass('on');
+            $(this).css('display','block');
+            $(this).css('opacity','1');
+            //$(this).css('z-index','1000');
+            ui.draggable.css('display','none');
+            //ui.draggable.offset({top:$(this).offset().top, left:$(this).offset().left});
             //alert(ui.draggable.children('div').attr('class'));
             if($(this).data('obj')==ui.draggable.children('div').attr('class')){
                 $(this).attr('rating','true');
             }
-            $('.droppable').css('display','none');
+            //$('.droppable').css('display','none');
         },
         out:function(event, ui){
             if($(this).data('obj')==ui.draggable.children('div').attr('class')){
@@ -44,6 +49,18 @@ $(document).ready(function(){
     $('.draggable').mouseup(function(){
         $('.droppable').css('display','none');
         $('.flashing').css('display','block');
+        $('.on').css('display','block');
     });
 
+    $('div').mousedown(function(){
+        if($(this).hasClass('on')){
+            var eClass=$(this).children().attr('class'); alert(eClass);
+            var e=$('div.'+eClass).parent('div');
+            e.offset({top:$(this).offset().top, left:$(this).offset().left});
+            e.css('display','block');
+            $(this).html('<span></span>');
+            $(this).css('display','none');
+        }
+
+    });
 });
