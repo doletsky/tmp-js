@@ -31,21 +31,46 @@ body {
     display: block;
 }
 #fitDrop1 {
-    left: 80%;
+    left: 10%;
     top: 20%;
 }
 #fitDrop2 {
-    left: 70%;
-    top: 20%;
+    left: 30%;
+    top: 10%;
+}
+#fitDrop3 {
+    left: 14%;
+    top: 55%;
+}
+#fitDrop4 {
+    left: 5%;
+    top: 38%;
+}
+#fitDrop5 {
+     left: 90%;
+     top: 20%;
+ }
+#fitDrop6 {
+    left: 59%;
+    top: 42%;
+}
+#fitDrop7 {
+     left: 78%;
+     top: 33%;
+ }
+#fitDrop8 {
+    left: 8%;
+    top: 72%;
 }
 	
 /*pazzle items*/
 #objContainer {
     height: 600px;
-    margin-left: 80%;
+    padding-left: 80%;
     position: absolute;
     width: 20%;
     z-index: 999;
+    overflow-y: scroll;
 }
 
 .clear{
@@ -68,9 +93,27 @@ body {
 	margin: 0;
 }
 .dObj1 {
-    background-image: url("../img/1.png");
-}
+     background-image: url("../img/earth1.png");
+ }
 .dObj2 {
-    background-image: url("../img/2.png");
+    background-image: url("../img/jupiter1.png");
+}
+.dObj3 {
+    background-image: url("../img/mars1.png");
+}
+.dObj4 {
+    background-image: url("../img/mercury1.png");
+}
+.dObj5 {
+    background-image: url("../img/neptune1.png");
+}
+.dObj6 {
+    background-image: url("../img/saturn1.png");
+}
+.dObj7 {
+    background-image: url("../img/uranus1.png");
+}
+.dObj8 {
+    background-image: url("../img/venus1.png");
 }
 
