@@ -6,6 +6,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
 	<script src="js/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/script.js"></script>
     <!--link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css"!-->
 	<link rel="stylesheet" href="css/style.css">
     <!--style type="text/css">
@@ -19,16 +20,7 @@
     <script type="text/javascript">
 $(function() {
 	
-    $('.draggable').draggable();
-    
-    $('.droppable').droppable({
-        drop: function(event, ui) {
-            ui.draggable.text("Оставлено")
-        },
-        activeClass: "active",
-        hoverClass: "hover",
-        tolerance: "fit"
-    });
+
 	
 	$('#touchDrop').droppable("option", "tolerance", "touch");
 });
@@ -36,12 +28,15 @@ $(function() {
 </head>
 <body>
     <div id="dropContainer">
-        <div id="fitDrop" class="droppable">
-            <span>Fit</span>
+        <div id="fitDrop1" class="droppable" data-obj="dObj1" rating="false">
+            <span></span>
         </div>
-        <div id="touchDrop" class="droppable">
-            <span>Touch</span>
-        </div>        
+        <div id="fitDrop2" class="droppable" data-obj="dObj2" rating="false">
+            <span></span>
+        </div>
+        <!--<div id="touchDrop" class="droppable">-->
+            <!--<span>Touch</span>-->
+        <!--</div>        -->
     </div>
 	<div id="objContainer">
 		<div class="draggable">
