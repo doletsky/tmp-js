@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>jQuery UI</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+	<script src="js/jquery.ui.touch-punch.min.js"></script>
+    <!--link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css"!-->
+	<link rel="stylesheet" href="css/style.css">
+    <!--style type="text/css">
+        .draggable, .droppable {font-size: large; border: thin solid black; padding: 4px; width: 100px; text-align: center; background-color: lightgray;}
+        .droppable {margin-bottom: 10px; margin-right: 5px; height: 60px; width: 120px}
+        #dropContainer {position: absolute; right: 5px;}
+        div span {position: relative; top: 25%}
+        .droppable.active {border: thick solid green}
+        .droppable.hover {background-color: lightgreen}
+    </style-->
+    <script type="text/javascript">
+$(function() {
+	
+    $('.draggable').draggable();
+    
+    $('.droppable').droppable({
+        drop: function(event, ui) {
+            ui.draggable.text("Оставлено")
+        },
+        activeClass: "active",
+        hoverClass: "hover",
+        tolerance: "fit"
+    });
+	
+	$('#touchDrop').droppable("option", "tolerance", "touch");
+});
+    </script> 
+</head>
+<body>
+    <div id="dropContainer">
+        <div id="fitDrop" class="droppable">
+            <span>Fit</span>
+        </div>
+        <div id="touchDrop" class="droppable">
+            <span>Touch</span>
+        </div>        
+    </div>
+	<div id="objContainer">
+		<div class="draggable">
+			<div class="dObj1"></div>
+		</div>
+		<div class="draggable">
+			<div class="dObj2"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</body>
+</html>
