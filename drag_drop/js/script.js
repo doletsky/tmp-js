@@ -1,5 +1,19 @@
 $(document).ready(function(){
 
+    $('.reload').click(function(){window.location.reload("true");});
+
+    $('.check').click(function(){
+        var cf=0;
+        cf=$('.droppable[rating="false"]').length;
+        if(cf>0){
+            $('.result').removeClass('correct');
+            $('.result').addClass('incorrect');
+        }else{
+            $('.result').removeClass('incorrect');
+            $('.result').addClass('correct');
+        }
+    });
+
     $('.draggable').draggable();
 
     $('.droppable').droppable({
@@ -8,12 +22,15 @@ $(document).ready(function(){
             $(this).attr('rating','false');
             ui.draggable.offset({top:$(this).offset().top, left:$(this).offset().left});
             //alert(ui.draggable.children('div').attr('class'));
-            if($(this).data('obj')==ui.draggable.children('div').attr('class')){$(this).attr('rating','true');}
+            if($(this).data('obj')==ui.draggable.children('div').attr('class')){
+                $(this).attr('rating','true');
+            }
             $('.droppable').css('display','none');
         },
         out:function(event, ui){
-            $(this).attr('rating','false');
-            //ui.draggable.css('position','relative');
+            if($(this).data('obj')==ui.draggable.children('div').attr('class')){
+                $(this).attr('rating','false');
+            }
         },
         activeClass: "active",
         hoverClass: "flashing",

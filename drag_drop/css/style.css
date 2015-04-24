@@ -6,6 +6,67 @@ body {
 	}
 
 
+.toolbar {
+    background-color: #62c356;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px 0 0 40px;
+    height: 100px;
+}
+.btn-int-drag.reload.disabled {
+    background-image: url("../img/buttons/2.png");
+}
+.btn-int-drag.reload {
+    background-image: url("../img/buttons/1.png");
+    height: 40px;
+    margin-top: 6px;
+    width: 100px;
+    cursor: pointer;
+}
+.btn-int-drag.save.disabled {
+    background-image: url("../img/buttons/4.png");
+}
+.btn-int-drag.save {
+    background-image: url("../img/buttons/3.png");
+    height: 40px;
+    margin-top: 6px;
+    width: 100px;
+}
+.btn-int-drag.check.disabled {
+    background-image: url("../img/buttons/6.png");
+}
+.btn-int-drag.check {
+    background-image: url("../img/buttons/5.png");
+    height: 40px;
+    margin-top: 6px;
+    width: 100px;
+    cursor: pointer;
+}
+.btn-int-drag.result.incorrect {
+    background-image: url("../img/buttons/7.png");
+    background-size: 280px auto;
+}
+.btn-int-drag.result.correct {
+    background-image: url("../img/buttons/8.png");
+    background-size: 280px auto;
+}
+.btn-int-drag.result {
+    height: 166px;
+    margin-top: 4px;
+    width: 1102px;
+}
+.btn-int-drag {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 70px auto;
+    border: 0 none;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
 /*pazzle place*/
 #dropContainer {
     background-image: url("../img/background.png");
