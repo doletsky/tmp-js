@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+    <meta charset="utf-8">
     <title>jQuery UI</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
 	<script src="js/jquery.ui.touch-punch.min.js"></script>
     <script src="js/script.js"></script>
 	<link rel="stylesheet" href="css/style.css">
-    <script type="text/javascript">
-$(function() {
-	
-
-	
-	$('#touchDrop').droppable("option", "tolerance", "touch");
-});
-    </script> 
 </head>
 <body>
 <div class="toolbar">
@@ -25,6 +17,7 @@ $(function() {
     <div class="empty btn-int-drag"></div>
     <div class="result btn-int-drag"></div>
 </div>
+
     <div id="dropContainer">
         <div id="fitDrop1" class="droppable" data-obj="dObj1" rating="false">
             <span></span>
@@ -50,33 +43,33 @@ $(function() {
         <div id="fitDrop8" class="droppable" data-obj="dObj8" rating="false">
             <span></span>
         </div>
-    </div>
-	<div id="objContainer">
-		<div class="draggable">
-			<div class="dObj1"></div>
-		</div>
-		<div class="draggable">
+    <div id="objContainer">
+        <div class="draggable scrollable">
+            <div class="dObj1"></div>
+        </div>
+		<div class="draggable scrollable">
 			<div class="dObj2"></div>
 		</div>
-        <div class="draggable">
+        <div class="draggable scrollable">
             <div class="dObj3"></div>
         </div>
-        <div class="draggable">
+        <div class="draggable scrollable">
             <div class="dObj4"></div>
         </div>
-        <div class="draggable">
+        <div class="draggable scrollable">
             <div class="dObj5"></div>
         </div>
-        <div class="draggable">
+        <div class="draggable scrollable">
             <div class="dObj6"></div>
         </div>
-        <div class="draggable">
+        <div class="draggable scrollable">
             <div class="dObj7"></div>
         </div>
-        <div class="draggable">
+        <div class="draggable scrollable">
             <div class="dObj8"></div>
         </div>
+
 	</div>
-	<div class="clear"></div>
+</div>
 </body>
 </html>
