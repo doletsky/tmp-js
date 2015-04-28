@@ -62,6 +62,12 @@ $(document).ready(function(){
         $('.on').css('opacity','1');
     });
 
+    $('div').click(function(){
+        if($(this).hasClass('on')){
+            $(this).mouseover();
+        }
+    });
+
     $('div').mouseover(function(){
         if($(this).hasClass('on')){
 
