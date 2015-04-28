@@ -1,0 +1,90 @@
+/*настройки рабочего поля*/
+#dropContainer {
+    width: 80%;                                     /*ширина рабочего поля от ширины эрана*/
+    background-image: url("../img/background.png"); /*картинка рабочего поля - в примере орбиты*/
+    background-size: 80%;                           /*ширина картинки рабочего поля от ширины рабочего поля*/
+    height: 600px;                                  /*высота рабочего поля*/
+}
+
+/*настройки мест установки ("прилипания") перемещаемых объектов*/
+.droppable {
+    width: 100px;           /*ширина места*/
+    height: 100px;          /*высота места*/
+    border-radius: 100%;    /*форма места - 0-прямуогольник, 100%-круг*/
+}
+
+/*
+расположение мест "прилипания" на рабочем поле;
+положение неописанного ниже объекта - верхний левый угол рабочего поля;
+все координаты - расстояния от верхнего левого угла рабочей области в процентах;
+*/
+#fitDrop1 {
+    left: 7%;
+    top: 14%;
+}
+#fitDrop2 {
+    left: 23%;
+    top: 10%;
+}
+#fitDrop3 {
+    left: 11%;
+    top: 54%;
+}
+#fitDrop4 {
+    left: 3%;
+    top: 38%;
+}
+#fitDrop5 {
+    left: 72%;
+    top: 12%;
+}
+#fitDrop6 {
+    left: 46%;
+    top: 42%;
+}
+#fitDrop7 {
+    left: 62%;
+    top: 69%;
+}
+#fitDrop8 {
+    left: 5%;
+    top: 72%;
+}
+
+/*общие настройки перемещаемых объектов*/
+.draggable {
+    width: 100px;   /*ширина объекта*/
+    left: 81%;      /*расстояние от левого края рабочей области,
+                      для размещения вдоль правого края рабочей области
+                      за пределами картинки рабочей области
+                      рекомендуется чуть больше значения background-size: 80% (строка 5) */
+}
+.draggable div, .draggable {
+    height: 100px;  /*высота объекта - можно использовать для масштабирования перемещаемых объектов*/
+}
+
+/*картинки-перемещаемые объекты*/
+.dObj1 {
+    background-image: url("../img/earth1.png");
+}
+.dObj2 {
+    background-image: url("../img/jupiter1.png");
+}
+.dObj3 {
+    background-image: url("../img/mars1.png");
+}
+.dObj4 {
+    background-image: url("../img/mercury1.png");
+}
+.dObj5 {
+    background-image: url("../img/neptune1.png");
+}
+.dObj6 {
+    background-image: url("../img/saturn1.png");
+}
+.dObj7 {
+    background-image: url("../img/uranus1.png");
+}
+.dObj8 {
+    background-image: url("../img/venus1.png");
+}
