@@ -1,0 +1,22 @@
+.job_exercises {
+    text-align: center;
+}
+.job_exercises table {
+    margin: 2px;
+    width: 99%;
+ }
+.job_exercises table td {
+    border: 1px solid grey;
+    padding: 5px;
+}
+
+.active:hover {
+    box-shadow: 0 0 5px 1px grey;
+}
+.active {
+    cursor: pointer;
+}
+
+.checkItem, .checkItem:hover {
+    box-shadow: 0 0 5px 1px green;
+}
