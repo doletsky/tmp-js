@@ -5,6 +5,29 @@ function initTest(){
     firstJob();
     $('.active').click(function(){
         $(this).toggleClass("checkItem");
+
+//        var arClass=$(this).attr('class').split(' ');
+//        var cordCol=arClass[0].substr(3,1);
+//        arClass=$(this).parent('tr').attr('class').split(' ');
+//        var cordRow=arClass[0].substr(3,1);
+        if($('.checkItem').length==2){
+            var cLine=0;
+            var rLine=0;
+            var arCord;
+            $('.checkItem').each(function(){
+                arCord=coordTd($(this));
+                rLine=arCord[0]-rLine;
+                cLine=arCord[1]-cLine;
+            });
+            var rl=parseInt(arCord[0])-(rLine/2);
+            var cl=parseInt(arCord[1])-(cLine/2);
+            var rad=Math.atan2(rLine, cLine);
+            if(rad>1){rad=rad+(0.15*rLine);}
+            else {rad=rad-(0.15*rLine);}
+            $('tr.row'+rl).children('td.col'+cl).html('<div class="line" style="transform:rotate('+rad+'rad);"></div>');
+            //alert(Math.atan2(rLine, cLine));
+            //alert(rl+','+cl);
+        }
     });
 }
 
@@ -54,4 +77,12 @@ function publishJob(num) {
         }
     }
     //alert(arJob.man);
+}
+
+function coordTd(el){
+    var arClass=el.attr('class').split(' ');
+    var cordCol=arClass[0].substr(3,1);
+    arClass=el.parent('tr').attr('class').split(' ');
+    var cordRow=arClass[0].substr(3,1);
+    return [cordRow, cordCol];
 }

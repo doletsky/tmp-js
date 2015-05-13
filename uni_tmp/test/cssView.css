@@ -20,3 +20,11 @@
 .checkItem, .checkItem:hover {
     box-shadow: 0 0 5px 1px green;
 }
+
+.line {
+    background-color: red;
+    height: 2px;
+    margin-left: -20%;
+    position: relative;
+    width: 140%;
+}
