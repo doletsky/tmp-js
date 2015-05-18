@@ -1,35 +1,128 @@
 /*инициализация теста*/
+var screenResol=0;
+var tableHeight=0;
+var numItem=0;
+
 function initTest(){
     $('.test_name').html(test.name);
     $('.test_manual').html(test.manual);
     firstJob();
     $('.active').click(function(){
-        $(this).toggleClass("checkItem");
 
-//        var arClass=$(this).attr('class').split(' ');
-//        var cordCol=arClass[0].substr(3,1);
-//        arClass=$(this).parent('tr').attr('class').split(' ');
-//        var cordRow=arClass[0].substr(3,1);
-        if($('.checkItem').length==2){
+        if($(this).hasClass('linkItem') && $('.checkItem').length==0){//del link
+            var arClasses=$(this).attr('class').split(' ');
+            for(var k in arClasses){
+                var cls=arClasses[k];console.log(cls.slice(0,3));
+                if(cls.slice(0,3)=='num'){
+                    $('div.'+arClasses[k]).remove();
+                    $('td.'+arClasses[k]).each(function(){
+                        var cnt=$(this).attr('class').split('num').length;
+                        $(this).removeClass(arClasses[k]);
+                        if(cnt==2){
+                            $(this).removeClass('linkItem');
+                        }
+                    });
+                }
+            }
+            return false;
+
+        }
+
+        if($(this).hasClass("checkItem")){
+            if($('.checkItem').length==1){//del class checkItem
+                $('.checkItem').removeClass('checkItem');
+            }
+        }else{//creating links
+            $(this).addClass("checkItem");
+            if($('.checkItem').length==2){
+                var cLine=0;
+                var rLine=0;
+                var arCord;
+                numItem++;
+                $('.checkItem').each(function(){
+                    $(this).addClass('num'+numItem);
+                    arCord=coordTd($(this));
+                    rLine=arCord[0]-rLine;
+                    cLine=arCord[1]-cLine;
+                });
+                //calc height in %
+                var lineHeight=0;
+                var rN=1;
+                if(rLine<0){rN=-1;}
+                for(var n=1;n<rLine*rN;n++){
+                    var idTr=arCord[0]-(n*rN);
+                    lineHeight=lineHeight+$('tr.row'+idTr).height();console.log(lineHeight);
+                }
+                //calc width in %
+                var lineWidth=0;
+                var cN=1;
+                if(cLine<0){cN=-1;}
+                for(var n=1;n<cLine*cN;n++){
+                    var idTd=arCord[1]-(n*cN);
+                    lineWidth=lineWidth+$('td.col'+idTd).innerWidth();console.log(lineWidth);
+                }
+                var rl=parseInt(arCord[0])-(rLine/2);
+                var cl=parseInt(arCord[1])-(cLine/2);
+                var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
+                var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();console.log($('td.col'+cl).innerWidth());
+                var leftCorr=(flineWidth-100)/2;
+                $('tr.row'+rl).children('td.col'+cl).css('position','relative');
+                $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="left:-'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);"></div>');
+                $('.checkItem').addClass('linkItem');
+                $('.checkItem').removeClass('checkItem');
+            }
+        }
+
+    });
+
+    $(window).resize(function(){
+        var arNum= new Array();
+        $('.line').each(function(){
+            var ar=$(this).attr('class').split(' ');
+            for(var i in ar){
+                if(ar[i].slice(0,3)=='num'){
+                    arNum[arNum.length]=ar[i];
+                }
+            }
+        });
+        for(var nd in arNum){
             var cLine=0;
             var rLine=0;
             var arCord;
-            $('.checkItem').each(function(){
+            $('td.'+arNum[nd]).each(function(){
                 arCord=coordTd($(this));
                 rLine=arCord[0]-rLine;
                 cLine=arCord[1]-cLine;
             });
+            //calc height in %
+            var lineHeight=0;
+            var rN=1;
+            if(rLine<0){rN=-1;}
+            for(var n=1;n<rLine*rN;n++){
+                var idTr=arCord[0]-(n*rN);
+                lineHeight=lineHeight+$('tr.row'+idTr).height();
+            }
+            //calc width in %
+            var lineWidth=0;
+            var cN=1;
+            if(cLine<0){cN=-1;}
+            for(var n=1;n<cLine*cN;n++){
+                var idTd=arCord[1]-(n*cN);
+                lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
+            }
             var rl=parseInt(arCord[0])-(rLine/2);
             var cl=parseInt(arCord[1])-(cLine/2);
-            var rad=Math.atan2(rLine, cLine);
-            if(rad>1){rad=rad+(0.15*rLine);}
-            else {rad=rad-(0.15*rLine);}
-            $('tr.row'+rl).children('td.col'+cl).html('<div class="line" style="transform:rotate('+rad+'rad);"></div>');
-            //alert(Math.atan2(rLine, cLine));
-            //alert(rl+','+cl);
+            var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
+            var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
+            var leftCorr=(flineWidth-100)/2;
+            $('div.'+arNum[nd]).css('width',flineWidth+'%');
+            $('div.'+arNum[nd]).css('left','-'+leftCorr+'%');
+            $('div.'+arNum[nd]).css('transform','rotate('+rad+'rad)');
         }
     });
 }
+
+
 
 /*первое задание теста*/
 function firstJob(){
@@ -53,8 +146,7 @@ function firstJob(){
     //alert(widthEven);
     $('.tJob tr:first td:even').css('width',widthEven+'%');
     $('.tJob tr:first td:odd').css('width','5%');
-    //$('.job_exercises').children('td:even').css('color', 'red');
-    //alert($('.job_exercises').children('table tr').length);
+
 
 
     /*заполняем первым заданием*/
@@ -73,10 +165,9 @@ function publishJob(num) {
             var r=1+2*(key-1);
             var c=1+2*(id-1);
             $('tr.row'+r).children('td.col'+c).html(curRJob[id].dataText);
-            $('tr.row'+r).children('td.col'+c).addClass('active');
+            $('tr.row'+r).children('td.col'+c).addClass('active');//
         }
     }
-    //alert(arJob.man);
 }
 
 function coordTd(el){

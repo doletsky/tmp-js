@@ -6,25 +6,24 @@
     width: 99%;
  }
 .job_exercises table td {
-    border: 1px solid grey;
+    /*border: 1px solid grey;*/
     padding: 5px;
 }
 
-.active:hover {
+.active{
     box-shadow: 0 0 5px 1px grey;
-}
-.active {
+/*}*/
+/*.active {*/
     cursor: pointer;
 }
 
-.checkItem, .checkItem:hover {
+.linkItem, .checkItem, .checkItem:hover {
     box-shadow: 0 0 5px 1px green;
 }
 
 .line {
     background-color: red;
     height: 2px;
-    margin-left: -20%;
-    position: relative;
-    width: 140%;
+    position: absolute;
+    top: 50%;
 }
