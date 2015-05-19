@@ -12,7 +12,7 @@ function initTest(){
         if($(this).hasClass('linkItem') && $('.checkItem').length==0){//del link
             var arClasses=$(this).attr('class').split(' ');
             for(var k in arClasses){
-                var cls=arClasses[k];console.log(cls.slice(0,3));
+                var cls=arClasses[k];
                 if(cls.slice(0,3)=='num'){
                     $('div.'+arClasses[k]).remove();
                     $('td.'+arClasses[k]).each(function(){
@@ -38,12 +38,44 @@ function initTest(){
                 var cLine=0;
                 var rLine=0;
                 var arCord;
+                var rightLinkNum=new Array();
+                var rightLink=false;
                 numItem++;
                 $('.checkItem').each(function(){
                     $(this).addClass('num'+numItem);
                     arCord=coordTd($(this));
                     rLine=arCord[0]-rLine;
                     cLine=arCord[1]-cLine;
+                    var compareLine=((1+parseInt(arCord[0]))/2)+','+((1+parseInt(arCord[1]))/2);
+                    if(rightLinkNum.length>0){//second iteration - do verify
+                        if($(this).data('type')=='q'){
+                            var arQ=new Array();
+                            if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
+                            else arQ=$(this).data('right').split(';');
+                            console.log(arQ);console.log(rightLinkNum);
+                            for(var qKey in arQ){
+                                for(var lKey in rightLinkNum){
+                                    if(arQ[qKey]==rightLinkNum[lKey]) rightLink=true;
+                                }
+                            }
+                        }else{
+
+                            for(var lKey in rightLinkNum){
+                                console.log(rightLinkNum[lKey]);console.log(compareLine);
+                                if(rightLinkNum[lKey]==compareLine) rightLink=true;
+                            }
+                        }
+                    }else{//first iteration - saving val
+                        if($(this).data('type')=='q'){
+                            var arQ=new Array();
+                            if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
+                            else arQ=$(this).data('right').split(';');
+                            console.log(arQ);
+                            rightLinkNum=arQ;
+                        }else{
+                            rightLinkNum[rightLinkNum.length]=compareLine;
+                        }
+                    }
                 });
                 //calc height in %
                 var lineHeight=0;
@@ -51,7 +83,7 @@ function initTest(){
                 if(rLine<0){rN=-1;}
                 for(var n=1;n<rLine*rN;n++){
                     var idTr=arCord[0]-(n*rN);
-                    lineHeight=lineHeight+$('tr.row'+idTr).height();console.log(lineHeight);
+                    lineHeight=lineHeight+$('tr.row'+idTr).height();
                 }
                 //calc width in %
                 var lineWidth=0;
@@ -59,15 +91,16 @@ function initTest(){
                 if(cLine<0){cN=-1;}
                 for(var n=1;n<cLine*cN;n++){
                     var idTd=arCord[1]-(n*cN);
-                    lineWidth=lineWidth+$('td.col'+idTd).innerWidth();console.log(lineWidth);
+                    lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
                 }
                 var rl=parseInt(arCord[0])-(rLine/2);
                 var cl=parseInt(arCord[1])-(cLine/2);
                 var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
-                var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();console.log($('td.col'+cl).innerWidth());
+                var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
                 var leftCorr=(flineWidth-100)/2;
+                leftCorr=leftCorr*(-1);
                 $('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="left:-'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);"></div>');
+                $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
                 $('.checkItem').addClass('linkItem');
                 $('.checkItem').removeClass('checkItem');
             }
@@ -129,7 +162,7 @@ function firstJob(){
     /*создаем таблицу рабочего поля*/
     var rowTable=1+2*(test.job.j1.row-1);
     var colTable=1+2*(test.job.j1.col-1);
-    var jExer='<table class="tJob">';
+    var jExer='<table class="tJob" data-job="j1" data-count-right="0">';
     var td='';
     var tr='';
     for(var i=1; i<colTable+1; i++){
@@ -158,16 +191,30 @@ function publishJob(num) {
     //alert($('.tJob tr td').length);
     var arKeyJob=Object.keys(test.job);
     var arJob=test.job[arKeyJob[num-1]];
+    var countRight=0;
     $('.job_manual').html(arJob.man);
     for(var key in arJob.jobData) {
         var curRJob=arJob.jobData[key];
         for(var id in curRJob){
             var r=1+2*(key-1);
             var c=1+2*(id-1);
-            $('tr.row'+r).children('td.col'+c).html(curRJob[id].dataText);
-            $('tr.row'+r).children('td.col'+c).addClass('active');//
+            var e= $('tr.row'+r).children('td.col'+c);
+            e.html(curRJob[id].dataText);
+            e.attr('data-type',curRJob[id].dataType);
+            if(curRJob[id].dataType=='q'){
+                var qRight='';
+                var curRight=curRJob[id].dataRight;
+                for(var nk in curRight){
+                    countRight++;
+                    qRight=qRight+';'+curRight[nk].row+','+curRight[nk].col;
+                }
+                e.attr('data-right',qRight.slice(1));
+            }
+            e.addClass('active');//
         }
     }
+    console.log(countRight);
+    $('.tJob').attr('data-count-right', countRight);
 }
 
 function coordTd(el){
@@ -176,4 +223,16 @@ function coordTd(el){
     arClass=el.parent('tr').attr('class').split(' ');
     var cordRow=arClass[0].substr(3,1);
     return [cordRow, cordCol];
+}
+
+/*
+functions for delay form
+ */
+
+function controlJob(){
+    var error=0;
+    var countError=0;
+    if($('.line[data-right="false"]').length){alert('Есть ошибки');error=$('.line[data-right="false"]').length;}
+    if($('.line').length!=$('.tJob').data('count-right')) {alert('Не верное количество ответов');countError=$('.line').length-$('.tJob').data('count-right');}
+    if(error==0 && countError==0) alert('Все верно!');
 }
