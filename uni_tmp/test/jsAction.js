@@ -2,12 +2,13 @@
 var screenResol=0;
 var tableHeight=0;
 var numItem=0;
+var workArea= new Object();
 
 function initTest(){
     $('.test_name').html(test.name);
     $('.test_manual').html(test.manual);
     firstJob();
-    $('.active').click(function(){
+    $(document).on('click','.active', function(){
 
         if($(this).hasClass('linkItem') && $('.checkItem').length==0){//del link
             var arClasses=$(this).attr('class').split(' ');
@@ -34,76 +35,7 @@ function initTest(){
             }
         }else{//creating links
             $(this).addClass("checkItem");
-            if($('.checkItem').length==2){
-                var cLine=0;
-                var rLine=0;
-                var arCord;
-                var rightLinkNum=new Array();
-                var rightLink=false;
-                numItem++;
-                $('.checkItem').each(function(){
-                    $(this).addClass('num'+numItem);
-                    arCord=coordTd($(this));
-                    rLine=arCord[0]-rLine;
-                    cLine=arCord[1]-cLine;
-                    var compareLine=((1+parseInt(arCord[0]))/2)+','+((1+parseInt(arCord[1]))/2);
-                    if(rightLinkNum.length>0){//second iteration - do verify
-                        if($(this).data('type')=='q'){
-                            var arQ=new Array();
-                            if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
-                            else arQ=$(this).data('right').split(';');
-                            console.log(arQ);console.log(rightLinkNum);
-                            for(var qKey in arQ){
-                                for(var lKey in rightLinkNum){
-                                    if(arQ[qKey]==rightLinkNum[lKey]) rightLink=true;
-                                }
-                            }
-                        }else{
-
-                            for(var lKey in rightLinkNum){
-                                console.log(rightLinkNum[lKey]);console.log(compareLine);
-                                if(rightLinkNum[lKey]==compareLine) rightLink=true;
-                            }
-                        }
-                    }else{//first iteration - saving val
-                        if($(this).data('type')=='q'){
-                            var arQ=new Array();
-                            if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
-                            else arQ=$(this).data('right').split(';');
-                            console.log(arQ);
-                            rightLinkNum=arQ;
-                        }else{
-                            rightLinkNum[rightLinkNum.length]=compareLine;
-                        }
-                    }
-                });
-                //calc height in %
-                var lineHeight=0;
-                var rN=1;
-                if(rLine<0){rN=-1;}
-                for(var n=1;n<rLine*rN;n++){
-                    var idTr=arCord[0]-(n*rN);
-                    lineHeight=lineHeight+$('tr.row'+idTr).height();
-                }
-                //calc width in %
-                var lineWidth=0;
-                var cN=1;
-                if(cLine<0){cN=-1;}
-                for(var n=1;n<cLine*cN;n++){
-                    var idTd=arCord[1]-(n*cN);
-                    lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
-                }
-                var rl=parseInt(arCord[0])-(rLine/2);
-                var cl=parseInt(arCord[1])-(cLine/2);
-                var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
-                var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
-                var leftCorr=(flineWidth-100)/2;
-                leftCorr=leftCorr*(-1);
-                $('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
-                $('.checkItem').addClass('linkItem');
-                $('.checkItem').removeClass('checkItem');
-            }
+            if($('.checkItem').length==2) creatLine();
         }
 
     });
@@ -155,14 +87,130 @@ function initTest(){
     });
 }
 
+function creatLine(flag=false){
+        var cLine=0;
+        var rLine=0;
+        var arCord;
+        var rightLinkNum=new Array();
+        var rightLink=false;
+        numItem++;
+        $('.checkItem').each(function(){
+            $(this).addClass('num'+numItem);
+            arCord=coordTd($(this));
+            rLine=arCord[0]-rLine;
+            cLine=arCord[1]-cLine;
+            var compareLine=((1+parseInt(arCord[0]))/2)+','+((1+parseInt(arCord[1]))/2);
+            if(rightLinkNum.length>0){//second iteration - do verify
+                if($(this).data('type')=='q'){
+                    var arQ=new Array();
+                    if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
+                    else arQ=$(this).data('right').split(';');
+                    console.log(arQ);console.log(rightLinkNum);
+                    for(var qKey in arQ){
+                        for(var lKey in rightLinkNum){
+                            if(arQ[qKey]==rightLinkNum[lKey]) rightLink=true;
+                        }
+                    }
+                }else{
 
+                    for(var lKey in rightLinkNum){
+                        console.log(rightLinkNum[lKey]);console.log(compareLine);
+                        if(rightLinkNum[lKey]==compareLine) rightLink=true;
+                    }
+                }
+            }else{//first iteration - saving val
+                if($(this).data('type')=='q'){
+                    var arQ=new Array();
+                    if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
+                    else arQ=$(this).data('right').split(';');
+                    console.log(arQ);
+                    rightLinkNum=arQ;
+                }else{
+                    rightLinkNum[rightLinkNum.length]=compareLine;
+                }
+            }
+        });
+        //calc height in %
+        var lineHeight=0;
+        var rN=1;
+        if(rLine<0){rN=-1;}
+        for(var n=1;n<rLine*rN;n++){
+            var idTr=arCord[0]-(n*rN);
+            lineHeight=lineHeight+$('tr.row'+idTr).height();
+        }
+        //calc width in %
+        var lineWidth=0;
+        var cN=1;
+        if(cLine<0){cN=-1;}
+        for(var n=1;n<cLine*cN;n++){
+            var idTd=arCord[1]-(n*cN);
+            lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
+        }
+        var rl=parseInt(arCord[0])-(rLine/2);
+        var cl=parseInt(arCord[1])-(cLine/2);
+        var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
+        var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
+        var leftCorr=(flineWidth-100)/2;
+        leftCorr=leftCorr*(-1);
+    if(flag==true){
+        var zero=1;
+        $('tr.row'+rl).children('td.col'+cl).children('div.line').each(function(){
+
+            if($(this).attr('style')=='left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);'){
+                $(this).addClass('rightAnswer');
+                zero=0;
+            }
+
+        });
+        if(zero==1){
+            $('tr.row'+rl).children('td.col'+cl).css('position','relative');
+            $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+' zeroAnswer" style="left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+        }
+    }
+    else{
+        $('tr.row'+rl).children('td.col'+cl).css('position','relative');
+        $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+    }
+        $('.checkItem').addClass('linkItem');
+        $('.checkItem').removeClass('checkItem');
+}
 
 /*первое задание теста*/
 function firstJob(){
+//    /*создаем таблицу рабочего поля*/
+//    var rowTable=1+2*(test.job.j1.row-1);
+//    var colTable=1+2*(test.job.j1.col-1);
+//    var jExer='<table class="tJob" data-job="j1" data-count-right="0">';
+//    var td='';
+//    var tr='';
+//    for(var i=1; i<colTable+1; i++){
+//        td+='<td class="col'+i+'"></td>';
+//    }
+//    for(var l=1; l<rowTable+1; l++){
+//        tr+='<tr class="row'+l+'">'+td+'</tr>';
+//    }
+//    jExer+=tr+'</table>';
+//    $('.job_exercises').html(jExer);
+//
+//    var techCol=test.job.j1.col-1;
+//    var widthEven=parseInt((100-(5*techCol))/test.job.j1.col);
+//    //alert(widthEven);
+//    $('.tJob tr:first td:even').css('width',widthEven+'%');
+//    $('.tJob tr:first td:odd').css('width','5%');
+
+
+
+    /*заполняем первым заданием*/
+    publishJob(1);
+}
+
+/*размещение задания в таблице рабочего поля*/
+function publishJob(num) {
     /*создаем таблицу рабочего поля*/
-    var rowTable=1+2*(test.job.j1.row-1);
-    var colTable=1+2*(test.job.j1.col-1);
-    var jExer='<table class="tJob" data-job="j1" data-count-right="0">';
+    var nameJob='j'+num;
+    var rowTable=1+2*(test.job[nameJob].row-1);
+    var colTable=1+2*(test.job[nameJob].col-1);
+    var jExer='<table class="tJob" data-job="'+nameJob+'" data-count-right="0">';
     var td='';
     var tr='';
     for(var i=1; i<colTable+1; i++){
@@ -174,22 +222,14 @@ function firstJob(){
     jExer+=tr+'</table>';
     $('.job_exercises').html(jExer);
 
-    var techCol=test.job.j1.col-1;
-    var widthEven=parseInt((100-(5*techCol))/test.job.j1.col);
+    var techCol=test.job[nameJob].col-1;
+    var widthEven=parseInt((100-(5*techCol))/test.job[nameJob].col);
     //alert(widthEven);
     $('.tJob tr:first td:even').css('width',widthEven+'%');
     $('.tJob tr:first td:odd').css('width','5%');
-
-
-
-    /*заполняем первым заданием*/
-    publishJob(1);
-}
-
-/*размещение задания в таблице рабочего поля*/
-function publishJob(num) {
-    //alert($('.tJob tr td').length);
     var arKeyJob=Object.keys(test.job);
+    if(num<1)return false;
+    if(num>arKeyJob.length)return false;
     var arJob=test.job[arKeyJob[num-1]];
     var countRight=0;
     $('.job_manual').html(arJob.man);
@@ -213,8 +253,8 @@ function publishJob(num) {
             e.addClass('active');//
         }
     }
-    console.log(countRight);
     $('.tJob').attr('data-count-right', countRight);
+    $('.tJob').attr('data-job', arKeyJob[num-1]);
 }
 
 function coordTd(el){
@@ -235,4 +275,52 @@ function controlJob(){
     if($('.line[data-right="false"]').length){alert('Есть ошибки');error=$('.line[data-right="false"]').length;}
     if($('.line').length!=$('.tJob').data('count-right')) {alert('Не верное количество ответов');countError=$('.line').length-$('.tJob').data('count-right');}
     if(error==0 && countError==0) alert('Все верно!');
+}
+
+function viewRightAnswer(){
+    var idJob=$('.tJob').data('job');
+    var arJob=test.job[idJob].jobData;
+    for(var idRow in arJob){
+        var arRow=arJob[idRow];
+        for(var idItem in arRow){
+            if(arRow[idItem].dataType=='q'){
+                var dataRight=arRow[idItem].dataRight;
+                for(var idR in dataRight){
+                    var r=1+2*(idRow-1);
+                    var c=1+2*(idItem-1);
+                    var e1= $('tr.row'+r).children('td.col'+c);
+                    e1.addClass('checkItem');
+                    var r=1+2*(dataRight[idR].row-1);
+                    var c=1+2*(dataRight[idR].col-1);
+                    var e2= $('tr.row'+r).children('td.col'+c);
+                    e2.addClass('checkItem');
+                    creatLine(true);
+                }
+            }
+        }
+    }
+    $('.line[data-right="false"]').addClass('falseAnswer');
+}
+
+function nextJob() {
+    rotateJob();
+}
+
+function prevJob() {
+    rotateJob(-1);
+}
+
+function rotateJob(inc=1) {
+    //saving cur. table
+    workArea[$('.tJob').attr('data-job')]=$('.job_exercises').html();
+    var curNumJob=$('.tJob').attr('data-job').slice(1);
+    var nextNumJob=parseInt(curNumJob)+parseInt(inc);
+    console.log($('.tJob').attr('data-job'));
+    console.log(inc);
+    if('j'+nextNumJob in workArea){
+        $('.job_exercises').html(workArea['j'+nextNumJob]);
+    }
+    else {
+        publishJob(nextNumJob);
+    }
 }

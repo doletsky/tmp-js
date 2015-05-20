@@ -27,3 +27,15 @@
     position: absolute;
     top: 50%;
 }
+
+.rightAnswer {
+    box-shadow: 0 0 5px 1px green;
+}
+
+.falseAnswer {
+    box-shadow: 0 0 5px 1px red;
+}
+
+.zeroAnswer {
+    opacity: 0.3;
+}
