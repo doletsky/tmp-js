@@ -5,6 +5,7 @@
     <title>jQuery UI</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/tune.js"></script>
     <script src="test/jsData.js"></script>
     <script src="test/jsAction.js"></script>
 	<link rel="stylesheet" href="css/style.css">
@@ -20,17 +21,25 @@
 <!--</div>-->
 <div class="container">
     <div class="box_button">
-        <div class="help"></div>
-        <div class="true"></div>
-        <div class="reset"></div>
+        <div class="help" title="Подсказка"></div>
+        <div class="true" title="Правильный ответ"></div>
+        <div class="reset" title="Заново"></div>
     </div>
     <div class="test_name">Название теста</div>
     <div class="test_manual">Инструкция к теста</div>
     <div class="job_manual">Инструкция к заданию</div>
     <div class="job_exercises">Выполняемое задание</div>
-    <div class="prev">Пред.</div>
-    <div class="send">Ответить</div>
-    <div class="next">След.</div>
+    <div class="footer_button">
+        <div class="prev"></div>
+        <div class="next"></div>
+        <div class="send">
+            <button>
+                Ответить
+            </button>
+        </div>
+    </div>
+    <div class="viewHelp"><div class="close"></div><div class="contentHelp"></div></div>
+
 </div>
 </body>
 </html>

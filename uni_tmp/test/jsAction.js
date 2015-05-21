@@ -87,7 +87,8 @@ function initTest(){
     });
 }
 
-function creatLine(flag=false){
+function creatLine( flag ){
+    if (typeof flag === 'undefined') flag = false;
         var cLine=0;
         var rLine=0;
         var arCord;
@@ -173,39 +174,18 @@ function creatLine(flag=false){
     }
         $('.checkItem').addClass('linkItem');
         $('.checkItem').removeClass('checkItem');
+        noFirstAnswer=1;
 }
 
 /*первое задание теста*/
 function firstJob(){
-//    /*создаем таблицу рабочего поля*/
-//    var rowTable=1+2*(test.job.j1.row-1);
-//    var colTable=1+2*(test.job.j1.col-1);
-//    var jExer='<table class="tJob" data-job="j1" data-count-right="0">';
-//    var td='';
-//    var tr='';
-//    for(var i=1; i<colTable+1; i++){
-//        td+='<td class="col'+i+'"></td>';
-//    }
-//    for(var l=1; l<rowTable+1; l++){
-//        tr+='<tr class="row'+l+'">'+td+'</tr>';
-//    }
-//    jExer+=tr+'</table>';
-//    $('.job_exercises').html(jExer);
-//
-//    var techCol=test.job.j1.col-1;
-//    var widthEven=parseInt((100-(5*techCol))/test.job.j1.col);
-//    //alert(widthEven);
-//    $('.tJob tr:first td:even').css('width',widthEven+'%');
-//    $('.tJob tr:first td:odd').css('width','5%');
-
-
-
     /*заполняем первым заданием*/
     publishJob(1);
 }
 
 /*размещение задания в таблице рабочего поля*/
 function publishJob(num) {
+    noFirstAnswer=0;
     /*создаем таблицу рабочего поля*/
     var nameJob='j'+num;
     var rowTable=1+2*(test.job[nameJob].row-1);
@@ -240,6 +220,9 @@ function publishJob(num) {
             var c=1+2*(id-1);
             var e= $('tr.row'+r).children('td.col'+c);
             e.html(curRJob[id].dataText);
+            if('dataImg' in curRJob[id]){
+					e.html(curRJob[id].dataText+'<img src="test/img/'+curRJob[id].dataImg+'" width="100%">');
+				}
             e.attr('data-type',curRJob[id].dataType);
             if(curRJob[id].dataType=='q'){
                 var qRight='';
@@ -310,17 +293,74 @@ function prevJob() {
     rotateJob(-1);
 }
 
-function rotateJob(inc=1) {
+/*view next or prev job*/
+function rotateJob(inc) {
+    if (typeof inc === 'undefined') inc = 1;
+    $('.contentHelp').html('');
     //saving cur. table
-    workArea[$('.tJob').attr('data-job')]=$('.job_exercises').html();
+    workArea[$('.tJob').attr('data-job')]={data:$('.job_exercises').html(),man:$('.job_manual').html(), nofirstanswer: noFirstAnswer};
     var curNumJob=$('.tJob').attr('data-job').slice(1);
     var nextNumJob=parseInt(curNumJob)+parseInt(inc);
     console.log($('.tJob').attr('data-job'));
     console.log(inc);
     if('j'+nextNumJob in workArea){
-        $('.job_exercises').html(workArea['j'+nextNumJob]);
+        $('.job_exercises').html(workArea['j'+nextNumJob].data);
+        $('.job_manual').html(workArea['j'+nextNumJob].man);
+        noFirstAnswer=workArea['j'+nextNumJob].nofirstanswer;
     }
     else {
         publishJob(nextNumJob);
     }
+}
+
+/*reset current job*/
+function resetCurJob(cTrue){
+    var curNumJob=$('.tJob').attr('data-job').slice(1);
+    if(cTrue==1 || modeFlagCoach==1){
+        slideOtherJob(curNumJob);
+    }else{
+        slideRotateJob(curNumJob);
+    }
+    publishJob(curNumJob);
+}
+
+function slideOtherJob(jnum){
+    var idj='j'+jnum;
+    if(idj in workArea){
+        delete workArea[idj];
+    }
+    //var tmpJob=test.job[idj];
+    test.job[idj]=otherJob[idj];
+}
+
+function slideRotateJob(jnum){
+
+    var idj='j'+jnum;
+    if(idj in workArea){
+        delete workArea[idj];
+    }
+    var tmpJob=test.job[idj].jobData;
+    var arIdRot=Object.keys(nRotJob[idj]);
+    var lastIdRot=parseInt(arIdRot[arIdRot.length-1]);lastIdRot++;
+    test.job[idj].jobData=nRotJob[idj][arIdRot[0]];
+    nRotJob[idj][lastIdRot]=tmpJob;
+    delete nRotJob[idj][arIdRot[0]];
+}
+
+/*load help in Help window*/
+function helpCurJob() {
+    var curNumJob=$('.tJob').attr('data-job');
+    var arHJob=test.job[curNumJob].help;
+    var cHelp='';
+    if('text' in arHJob){
+        if(arHJob.text.length>0){
+            cHelp+=arHJob.text+'<br>';
+        }
+    }
+    if('img' in arHJob){
+        if(arHJob.img.length>0){
+            cHelp+='<img src="test/img/'+arHJob.img+'" width="80%">';
+        }
+    }
+    $('.contentHelp').html(cHelp);
 }
