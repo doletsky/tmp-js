@@ -8,8 +8,17 @@ function initTest(){
     $('.test_name').html(test.name);
     $('.test_manual').html(test.manual);
     firstJob();
+    var arKeyJobInd=Object.keys(test.job);
+    var htmlInd='';
+    for(var ind=0; ind<arKeyJobInd.length; ind++){
+        var ball='';
+        if(modeFlagCoach==1)ball=' data-ball="100"';
+        htmlInd+='<div id="'+arKeyJobInd[ind]+'" class="light grey"'+ball+'></div>';
+    }
+    $('.indicate').html(htmlInd);
+    $('.light#'+$('.tJob').data('job')).addClass('focus');
     $(document).on('click','.active', function(){
-
+        if($('.tJob').attr('data-answer')==1)return false;//lock if answering yet
         if($(this).hasClass('linkItem') && $('.checkItem').length==0){//del link
             var arClasses=$(this).attr('class').split(' ');
             for(var k in arClasses){
@@ -35,7 +44,9 @@ function initTest(){
             }
         }else{//creating links
             $(this).addClass("checkItem");
-            if($('.checkItem').length==2) creatLine();
+            if($('.checkItem').length==2){
+               if( creatLine()==false)$(this).removeClass("checkItem");
+            }
         }
 
     });
@@ -115,7 +126,6 @@ function creatLine( flag ){
                 }else{
 
                     for(var lKey in rightLinkNum){
-                        console.log(rightLinkNum[lKey]);console.log(compareLine);
                         if(rightLinkNum[lKey]==compareLine) rightLink=true;
                     }
                 }
@@ -124,13 +134,26 @@ function creatLine( flag ){
                     var arQ=new Array();
                     if($(this).data('right').indexOf(';')=='-1')arQ[0]=$(this).data('right');
                     else arQ=$(this).data('right').split(';');
-                    console.log(arQ);
                     rightLinkNum=arQ;
                 }else{
                     rightLinkNum[rightLinkNum.length]=compareLine;
                 }
             }
         });
+        //control limits creating
+        if(onlyNext==1){//only next blocks
+            if(rLine>3 || rLine<-3){return false;}
+            if(cLine>3 || cLine<-3){return false;}
+        }
+        if(noCreatHorizont==1){
+            if(rLine==0)return false;
+        }
+        if(noCreatVertical==1){
+            if(cLine==0)return false;
+        }
+        if(noCreatDiagonal==1){
+            if(rLine!=0&&cLine!=0)return false;
+        }
         //calc height in %
         var lineHeight=0;
         var rN=1;
@@ -190,7 +213,7 @@ function publishJob(num) {
     var nameJob='j'+num;
     var rowTable=1+2*(test.job[nameJob].row-1);
     var colTable=1+2*(test.job[nameJob].col-1);
-    var jExer='<table class="tJob" data-job="'+nameJob+'" data-count-right="0">';
+    var jExer='<table class="tJob" data-job="'+nameJob+'" data-count-right="0" data-answer="0">';
     var td='';
     var tr='';
     for(var i=1; i<colTable+1; i++){
@@ -221,7 +244,7 @@ function publishJob(num) {
             var e= $('tr.row'+r).children('td.col'+c);
             e.html(curRJob[id].dataText);
             if('dataImg' in curRJob[id]){
-					e.html(curRJob[id].dataText+'<img src="test/img/'+curRJob[id].dataImg+'" width="100%">');
+					e.html(curRJob[id].dataText+'<img src="'+rootDir+'test/img/'+curRJob[id].dataImg+'" width="100%">');
 				}
             e.attr('data-type',curRJob[id].dataType);
             if(curRJob[id].dataType=='q'){
@@ -238,6 +261,8 @@ function publishJob(num) {
     }
     $('.tJob').attr('data-count-right', countRight);
     $('.tJob').attr('data-job', arKeyJob[num-1]);
+    $('.light').removeClass('focus');
+    $('.light#'+$('.tJob').attr('data-job')).addClass('focus');
 }
 
 function coordTd(el){
@@ -253,11 +278,15 @@ functions for delay form
  */
 
 function controlJob(){
-    var error=0;
+    if($('.tJob').attr('data-answer')==1)return false;//lock if answering yet
+    $('.tJob').attr('data-answer','1');
+    var trueLine=$('.line[data-right="true"]').length;
+    var error=$('.line[data-right="false"]').length;
     var countError=0;
-    if($('.line[data-right="false"]').length){alert('Есть ошибки');error=$('.line[data-right="false"]').length;}
-    if($('.line').length!=$('.tJob').data('count-right')) {alert('Не верное количество ответов');countError=$('.line').length-$('.tJob').data('count-right');}
-    if(error==0 && countError==0) alert('Все верно!');
+//    if($('.line[data-right="false"]').length){alert('Есть ошибки');error=$('.line[data-right="false"]').length;}
+    if($('.line').length!=$('.tJob').data('count-right')) {error++;countError=$('.line').length-$('.tJob').data('count-right');}
+//    if(error==0 && countError==0) alert('Все верно!');
+    return [trueLine, error];
 }
 
 function viewRightAnswer(){
@@ -307,6 +336,8 @@ function rotateJob(inc) {
         $('.job_exercises').html(workArea['j'+nextNumJob].data);
         $('.job_manual').html(workArea['j'+nextNumJob].man);
         noFirstAnswer=workArea['j'+nextNumJob].nofirstanswer;
+        $('.light').removeClass('focus');
+        $('.light#'+$('.tJob').attr('data-job')).addClass('focus');
     }
     else {
         publishJob(nextNumJob);
@@ -349,6 +380,7 @@ function slideRotateJob(jnum){
 
 /*load help in Help window*/
 function helpCurJob() {
+    if($('.tJob').data('answer')==0)return false;
     var curNumJob=$('.tJob').attr('data-job');
     var arHJob=test.job[curNumJob].help;
     var cHelp='';
@@ -359,7 +391,7 @@ function helpCurJob() {
     }
     if('img' in arHJob){
         if(arHJob.img.length>0){
-            cHelp+='<img src="test/img/'+arHJob.img+'" width="80%">';
+            cHelp+='<img src="'+rootDir+'test/img/'+arHJob.img+'" width="80%">';
         }
     }
     $('.contentHelp').html(cHelp);

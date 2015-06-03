@@ -72,6 +72,12 @@ body {
     left: 95%;
 }
 
+/* message */
+.result {
+    left: 37%;
+    position: absolute;
+    top: 30px;
+}
 
 /*top left buttons*/
 .box_button {
@@ -155,4 +161,44 @@ body {
 }
 .next, .send  {
     float: right;
+}
+
+/*indication*/
+.indicate {
+    float: left;
+    margin-left: 20px;
+    width: auto;
+    z-index: 999;
+}
+
+.indicate .light {
+    border-radius: 15px;
+    float: left;
+    height: 15px;
+    margin: 2px;
+    width: 15px;
+    padding: 1px;
+}
+
+.light.grey {
+    background-color: grey;
+    box-shadow: 1px 1px 4px 2px darkslategrey inset, -3px -3px 5px 1px lightgrey inset
+}
+
+.light.red {
+    background-color: red;
+    box-shadow: 1px 1px 4px 2px darkred inset, -3px -3px 5px 1px orangered inset
+}
+.light.orange {
+    background-color: #ffa333;
+    box-shadow: 1px 1px 4px 2px #ff8c00 inset, -3px -3px 5px 1px #ffba66 inset
+}
+.light.green {
+    background-color: green;
+    box-shadow: 1px 1px 4px 2px darkgreen inset, -3px -3px 5px 1px lightgreen inset
+}
+
+
+.light.focus {
+    transform:scale(1.2);
 }
