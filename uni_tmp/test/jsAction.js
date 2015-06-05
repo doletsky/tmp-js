@@ -286,7 +286,7 @@ function controlJob(){
 //    if($('.line[data-right="false"]').length){alert('Есть ошибки');error=$('.line[data-right="false"]').length;}
     if($('.line').length!=$('.tJob').data('count-right')) {error++;countError=$('.line').length-$('.tJob').data('count-right');}
 //    if(error==0 && countError==0) alert('Все верно!');
-    return [trueLine, error];
+    return [trueLine, error, $('.tJob').data('count-right'), $('.tJob').data('job')];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
 }
 
 function viewRightAnswer(){

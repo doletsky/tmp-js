@@ -1,11 +1,12 @@
 var noFirstAnswer=0; /*первого ответа не было*/
 var clickTrue=0; /*была нажата кнопка Правильный ответ*/
+var arAnsBall=Object(); /*массив ответов для вычисления баллов*/
 
 $(document).ready(function(){
 
     initTest(); /*инициализирует работу тести, д.б. описана в test/jsAction.js*/
     $('.send').on('click',function(){
-        var contr=controlJob();
+        var contr=controlJob();/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
         if(contr==false)return false;
         var mess='';
         $('.focus').removeClass('grey');
@@ -21,6 +22,17 @@ $(document).ready(function(){
             mess=ansFalse;
             $('.focus').addClass('red');
         }
+        if(modeFlagCoach==0){
+            if(!(contr[3] in arAnsBall))arAnsBall[contr[3]]=[];
+            arAnsBall[contr[3]][arAnsBall[contr[3]].length]=parseInt(100*contr[0]/contr[2]);
+            $('.focus').attr('data-res-ball',Math.max.apply(null, arAnsBall[contr[3]]));
+        }else{
+            if(!(contr[3] in arAnsBall))arAnsBall[contr[3]]='';
+            var corrBall=parseInt($('.focus').attr('data-ball'));
+            arAnsBall[contr[3]]=parseInt(corrBall*contr[0]/contr[2]);
+            $('.focus').attr('data-res-ball',arAnsBall[contr[3]]);
+        }
+
         $('.result').html(mess);
     });
 

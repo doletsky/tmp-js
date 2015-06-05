@@ -22,7 +22,7 @@
 }
 
 .line {
-    background-color: red;
+    background-color: grey;
     height: 2px;
     position: absolute;
     top: 50%;
