@@ -1,0 +1,42 @@
+.job_exercises {
+    text-align: center;
+}
+.job_exercises table {
+    margin: 2px;
+    width: 99%;
+ }
+.job_exercises table td {
+    /*border: 1px solid grey;*/
+    padding: 5px;
+}
+
+.active{
+    box-shadow: 0 0 5px 1px grey;
+/*}*/
+/*.active {*/
+    cursor: pointer;
+}
+
+.linkItem, .checkItem, .checkItem:hover {
+    box-shadow: 0 0 5px 1px green;
+}
+
+.line {
+    background-color: red;
+    height: 2px;
+    position: absolute;
+    top: 50%;
+    z-index:999;
+}
+
+.rightAnswer {
+    box-shadow: 0 0 5px 1px green;
+}
+
+.falseAnswer {
+    box-shadow: 0 0 5px 1px red;
+}
+
+.zeroAnswer {
+    opacity: 0.3;
+}
