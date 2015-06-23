@@ -1,12 +1,11 @@
 /*инициализация теста*/
 var screenResol=0;
 var tableHeight=0;
+var modeFlagCoach=0; /* 0 - тренировочный , 1 - контролирующий */
 var numItem=0;
 var workArea= new Object();
 
 function initTest(){
-    $('.test_name').html(test.name);
-    $('.test_manual').html(test.manual);
     firstJob();
     var arKeyJobInd=Object.keys(test.job);
     var htmlInd='';
@@ -244,7 +243,6 @@ function publishJob(num) {
     if(num>arKeyJob.length)return false;
     var arJob=test.job[arKeyJob[num-1]];
     var countRight=0;
-    $('.job_manual').html(arJob.man);
     for(var key in arJob.colTitle) {
         var iTh=1+2*(key-1);
         var classTh='th'+iTh;
@@ -258,7 +256,7 @@ function publishJob(num) {
             var e= $('tr.row'+r).children('td.col'+c);
             e.html(curRJob[id].dataText);
             if('dataImg' in curRJob[id]){
-					e.html(curRJob[id].dataText+'<img src="'+rootDir+'test/img/'+curRJob[id].dataImg+'" width="100%">');
+					e.html(curRJob[id].dataText+'<img src="'+imgDir+curRJob[id].dataImg+'" width="100%">');
 				}
             e.attr('data-type',curRJob[id].dataType);
             if(curRJob[id].dataType=='q'){
@@ -328,35 +326,6 @@ function viewRightAnswer(){
     $('.line[data-right="false"]').addClass('falseAnswer');
 }
 
-function nextJob() {
-    rotateJob();
-}
-
-function prevJob() {
-    rotateJob(-1);
-}
-
-/*view next or prev job*/
-function rotateJob(inc) {
-    if (typeof inc === 'undefined') inc = 1;
-    $('.contentHelp').html('');
-    //saving cur. table
-    workArea[$('.tJob').attr('data-job')]={data:$('.job_exercises').html(),man:$('.job_manual').html(), nofirstanswer: noFirstAnswer};
-    var curNumJob=$('.tJob').attr('data-job').slice(1);
-    var nextNumJob=parseInt(curNumJob)+parseInt(inc);
-    console.log($('.tJob').attr('data-job'));
-    console.log(inc);
-    if('j'+nextNumJob in workArea){
-        $('.job_exercises').html(workArea['j'+nextNumJob].data);
-        $('.job_manual').html(workArea['j'+nextNumJob].man);
-        noFirstAnswer=workArea['j'+nextNumJob].nofirstanswer;
-        $('.light').removeClass('focus');
-        $('.light#'+$('.tJob').attr('data-job')).addClass('focus');
-    }
-    else {
-        publishJob(nextNumJob);
-    }
-}
 
 /*reset current job*/
 function resetCurJob(cTrue){
@@ -395,21 +364,3 @@ function slideRotateJob(jnum){
 	
 }
 
-/*load help in Help window*/
-function helpCurJob() {
-    if($('.tJob').data('answer')==0)return false;
-    var curNumJob=$('.tJob').attr('data-job');
-    var arHJob=test.job[curNumJob].help;
-    var cHelp='';
-    if('text' in arHJob){
-        if(arHJob.text.length>0){
-            cHelp+=arHJob.text+'<br>';
-        }
-    }
-    if('img' in arHJob){
-        if(arHJob.img.length>0){
-            cHelp+='<img src="'+rootDir+'test/img/'+arHJob.img+'" width="80%">';
-        }
-    }
-    $('.contentHelp').html(cHelp);
-}

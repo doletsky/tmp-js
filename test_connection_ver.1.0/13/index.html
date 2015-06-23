@@ -40,16 +40,12 @@
 <script type="text/javascript" src="../js/key_question.js"></script>
 
 <!-- тест соответствий -->
-    <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script-->
     <script src="../js/test_connection/test_connection.js"></script>
-    	<link rel="stylesheet" href="../styles/test_connection_.css">
-	
+
 	<!-- Для контейнера? -->
-	    <script src="js_13/test_connection_data.js"></script>  <!-- Если это сборщик, то он должен лежать в папке урока. Что делать если тестов больше одного? -->
-		<script src="js_13/test_connection_tune.js"></script> <!-- Настройки можно ли соединить со сборщиком? -->
-		
-    <script src="../js/test_connection/jsAction.js"></script><!-- За что отвечает? -->
-    <link rel="stylesheet" href="../styles/test_connection_cssView.css"><!-- За что отвечает?-->
+	<script src="js_13/test_connection_data.js"></script>  <!-- Это сборщик, для одной странице может быть только один-->
+    <script src="js_13/test_connection_jsAction.js"></script><!-- Логика работы теста -->
+    <link rel="stylesheet" href="../styles/test_connection_cssView.css"><!-- Внешний вид-->
   
 
   </head>
@@ -130,10 +126,7 @@
 	</div>
 
 	<div class="interakt_zadanie">
-		<!--div class="test_name">Название теста</div>
-    <div class="test_manual">Инструкция к теста</div>
-    <div class="job_manual">Инструкция к заданию</div-->
-    <div class="job_exercises">Выполняемое задание</div>
+        <div class="job_exercises"></div>
 	</div>	
 </div>
 
