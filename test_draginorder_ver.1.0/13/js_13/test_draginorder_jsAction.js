@@ -6,93 +6,33 @@ var numItem=0;
 var workArea= new Object();
 
 function initTest(){
-    firstJob();
-    var arKeyJobInd=Object.keys(test.job);
+
+    var arKeyJobInd=Object.keys(test.jobData); /*д.б. вызов функции, перемешивающей правильную послед-ть*/
+    $(".job_exercises").append("<div id='sortContainer'></div>");
     var htmlInd='';
     for(var ind=0; ind<arKeyJobInd.length; ind++){
-        var ball='';
-        if(modeFlagCoach==1)ball=' data-ball="100"';
-        htmlInd+='<div id="'+arKeyJobInd[ind]+'" class="light grey"'+ball+'></div>';
+        htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable ui-state-error">'+test.jobData[arKeyJobInd[ind]].dataText+'</div>';
     }
-    $('.indicate').html(htmlInd);
-    $('.light#'+$('.tJob').data('job')).addClass('focus');
-    $(document).on('click','.active', function(){
-        if($('.tJob').attr('data-answer')==1)return false;//lock if answering yet
-        if($(this).hasClass('linkItem') && $('.checkItem').length==0){//del link
-            var arClasses=$(this).attr('class').split(' ');
-            for(var k in arClasses){
-                var cls=arClasses[k];
-                if(cls.slice(0,3)=='num'){
-                    $('div.'+arClasses[k]).remove();
-                    $('td.'+arClasses[k]).each(function(){
-                        var cnt=$(this).attr('class').split('num').length;
-                        $(this).removeClass(arClasses[k]);
-                        if(cnt==2){
-                            $(this).removeClass('linkItem');
-                        }
-                    });
-                }
-            }
-            return false;
+    $("#sortContainer").append(htmlInd);
+    $(function() {
 
-        }
-
-        if($(this).hasClass("checkItem")){
-            if($('.checkItem').length==1){//del class checkItem
-                $('.checkItem').removeClass('checkItem');
-            }
-        }else{//creating links
-            $(this).addClass("checkItem");
-            if($('.checkItem').length==2){
-               if( creatLine()==false)$(this).removeClass("checkItem");
-            }
-        }
-
-    });
-
-    $(window).resize(function(){
-        var arNum= new Array();
-        $('.line').each(function(){
-            var ar=$(this).attr('class').split(' ');
-            for(var i in ar){
-                if(ar[i].slice(0,3)=='num'){
-                    arNum[arNum.length]=ar[i];
-                }
+        $('#sortContainer').sortable({
+            update: function(event, ui) {
+                indicateTrue();
             }
         });
-        for(var nd in arNum){
-            var cLine=0;
-            var rLine=0;
-            var arCord;
-            $('td.'+arNum[nd]).each(function(){
-                arCord=coordTd($(this));
-                rLine=arCord[0]-rLine;
-                cLine=arCord[1]-cLine;
-            });
-            //calc height in %
-            var lineHeight=0;
-            var rN=1;
-            if(rLine<0){rN=-1;}
-            for(var n=1;n<rLine*rN;n++){
-                var idTr=arCord[0]-(n*rN);
-                lineHeight=lineHeight+$('tr.row'+idTr).height();
-            }
-            //calc width in %
-            var lineWidth=0;
-            var cN=1;
-            if(cLine<0){cN=-1;}
-            for(var n=1;n<cLine*cN;n++){
-                var idTd=arCord[1]-(n*cN);
-                lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
-            }
-            var rl=parseInt(arCord[0])-(rLine/2);
-            var cl=parseInt(arCord[1])-(cLine/2);
-            var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
-            var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
-            var leftCorr=(flineWidth-100)/2;
-            $('div.'+arNum[nd]).css('width',flineWidth+'%');
-            $('div.'+arNum[nd]).css('left','-'+leftCorr+'%');
-            $('div.'+arNum[nd]).css('transform','rotate('+rad+'rad)');
+
+    });
+    indicateTrue();
+}
+
+function indicateTrue(){
+    $('.sortable').each(function(){
+        //var $(this).attr('id').slice(4,1);
+        if((1+$('.sortable').index($(this)))==$(this).attr('id').slice(4)){
+            $(this).attr('data-right','true');
+        }else{
+            $(this).attr('data-right','false');
         }
     });
 }

@@ -1,0 +1,9 @@
+.job_exercises {
+    text-align: center;
+}
+.sortable {
+    border: 1px solid grey;
+    padding: 2px;
+    margin: 5px;
+    cursor: pointer;
+}
