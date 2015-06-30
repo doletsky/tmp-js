@@ -7,11 +7,12 @@ var workArea= new Object();
 
 function initTest(){
 
-    var arKeyJobInd=Object.keys(test.jobData); /*д.б. вызов функции, перемешивающей правильную послед-ть*/
+    var arKeyJobInd=mix(Object.keys(test.jobData)); /* mix - вызов функции, перемешивающей правильную послед-ть */
+    $(".job_exercises").html('');
     $(".job_exercises").append("<div id='sortContainer'></div>");
     var htmlInd='';
     for(var ind=0; ind<arKeyJobInd.length; ind++){
-        htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable ui-state-error">'+test.jobData[arKeyJobInd[ind]].dataText+'</div>';
+        htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+test.jobData[arKeyJobInd[ind]].dataText+'</div>';
     }
     $("#sortContainer").append(htmlInd);
     $(function() {
@@ -19,11 +20,33 @@ function initTest(){
         $('#sortContainer').sortable({
             update: function(event, ui) {
                 indicateTrue();
+                if(noFirstAnswer==0){
+                    noFirstAnswer=1;
+                    $(".check_your").css({"background": "url('../styles/img/5.png') no-repeat", "background-size":"auto 100%"});
+                }
             }
         });
 
     });
     indicateTrue();
+}
+
+function mix(ar){
+    var newAr=[];
+    if(ar.length>2){
+        var oldAr=ar;
+        for(var i=0;i<ar.length+1;i++){console.log(i);
+            var max=oldAr.length-1;console.log('max='+max);
+            var randNum=Math.floor(Math.random() * (max  + 1));console.log('rand='+randNum);
+            newAr[newAr.length]=oldAr[randNum];
+            oldAr.splice(randNum, 1);console.log(oldAr);
+        }
+        newAr[newAr.length]=oldAr[0];
+    }else{
+        newAr=ar;
+    }
+    console.log(newAr);
+    return newAr;
 }
 
 function indicateTrue(){
@@ -36,6 +59,22 @@ function indicateTrue(){
         }
     });
 }
+
+function controlJob(){
+    if($('#sortContainer').attr('data-answer')==1)return false;//lock if answering yet
+    $('#sortContainer').attr('data-answer','1');
+    var trueLine=$('.sortable[data-right="true"]').length;
+    var error=$('.sortable[data-right="false"]').length;
+    var countItem=$('.sortable').length;
+    var countError=error;
+    $('#sortContainer').unbind();$('.sortable').unbind();
+    return [trueLine, error, countItem, countItem];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
+}
+
+
+
+
+
 
 function creatLine( flag ){
     if (typeof flag === 'undefined') flag = false;
@@ -229,17 +268,7 @@ function coordTd(el){
 functions for delay form
  */
 
-function controlJob(){
-    if($('.tJob').attr('data-answer')==1)return false;//lock if answering yet
-    $('.tJob').attr('data-answer','1');
-    var trueLine=$('.line[data-right="true"]').length;
-    var error=$('.line[data-right="false"]').length;
-    var countError=0;
-//    if($('.line[data-right="false"]').length){alert('Есть ошибки');error=$('.line[data-right="false"]').length;}
-    if($('.line').length!=$('.tJob').data('count-right')) {error++;countError=$('.line').length-$('.tJob').data('count-right');}
-//    if(error==0 && countError==0) alert('Все верно!');
-    return [trueLine, error, $('.tJob').data('count-right'), $('.tJob').data('job')];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
-}
+
 
 function viewRightAnswer(){
     var idJob=$('.tJob').data('job');

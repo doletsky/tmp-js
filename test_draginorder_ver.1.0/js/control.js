@@ -16,7 +16,7 @@ $(document).ready(function(){
 	/*дополнения для размещения в уроке*/
 	$('.drop').on('click', function(){
         if(noFirstAnswer==0)return false;
-        resetCurJob(clickTrue);
+        initTest();
 		$(".result").css("background","none");
     });
     
