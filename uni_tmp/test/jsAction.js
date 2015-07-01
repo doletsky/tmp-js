@@ -108,7 +108,7 @@ function creatLine( flag ){
         numItem++;
         $('.checkItem').each(function(){
             $(this).addClass('num'+numItem);
-            arCord=coordTd($(this));
+            arCord=coordTd($(this));console.log(arCord);
             rLine=arCord[0]-rLine;
             cLine=arCord[1]-cLine;
             var compareLine=((1+parseInt(arCord[0]))/2)+','+((1+parseInt(arCord[1]))/2);
@@ -267,9 +267,9 @@ function publishJob(num) {
 
 function coordTd(el){
     var arClass=el.attr('class').split(' ');
-    var cordCol=arClass[0].substr(3,1);
+    var cordCol=arClass[0].substr(3);
     arClass=el.parent('tr').attr('class').split(' ');
-    var cordRow=arClass[0].substr(3,1);
+    var cordRow=arClass[0].substr(3);
     return [cordRow, cordCol];
 }
 
