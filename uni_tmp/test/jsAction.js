@@ -267,9 +267,9 @@ function publishJob(num) {
 
 function coordTd(el){
     var arClass=el.attr('class').split(' ');
-    var cordCol=arClass[0].substr(3,1);
+    var cordCol=arClass[0].substr(3);
     arClass=el.parent('tr').attr('class').split(' ');
-    var cordRow=arClass[0].substr(3,1);
+    var cordRow=arClass[0].substr(3);
     return [cordRow, cordCol];
 }
 
