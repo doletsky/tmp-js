@@ -24,7 +24,8 @@ function initTest(){
                     noFirstAnswer=1;
                     $(".check_your").css({"background": "url('../styles/img/5.png') no-repeat", "background-size":"auto 100%"});
                 }
-            }
+            },
+            containment: "parent"
         });
 
     });
