@@ -3,15 +3,17 @@ var screenResol=0;
 var tableHeight=0;
 var numItem=0;
 var workArea= new Object();
+var curDataJob='j1';
+var ctest=test.job[curDataJob];
 
 function initTest(){
 
-    var arKeyJobInd=mix(Object.keys(test.jobData)); /* mix - вызов функции, перемешивающей правильную послед-ть */
-    $(".job_exercises").html('');
-    $(".job_exercises").append("<div id='sortContainer'></div>");
+    var arKeyJobInd=mix(Object.keys(ctest.jobData)); /* mix - вызов функции, перемешивающей правильную послед-ть */
+    $("#sortContainer").html('');
+    $(".job_exercises").html("<div id='sortContainer' data-job='"+curDataJob+"'></div>");
     var htmlInd='';
     for(var ind=0; ind<arKeyJobInd.length; ind++){
-        htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+test.jobData[arKeyJobInd[ind]].dataText+'</div>';
+        htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+ctest.jobData[arKeyJobInd[ind]].dataText+'</div>';
     }
     $("#sortContainer").append(htmlInd);
     $(function() {
@@ -119,21 +121,26 @@ function rotateJob(inc) {
     if (typeof inc === 'undefined') inc = 1;
     $('.contentHelp').html('');
     //saving cur. table
-    workArea[$('.tJob').attr('data-job')]={data:$('.job_exercises').html(),man:$('.job_manual').html(), nofirstanswer: noFirstAnswer};
-    var curNumJob=$('.tJob').attr('data-job').slice(1);
+    workArea[$('#sortContainer').attr('data-job')]={data:$('.job_exercises').html(),man:$('.job_manual').html(), nofirstanswer: noFirstAnswer};
+    var curNumJob=$('#sortContainer').attr('data-job').slice(1);
     var nextNumJob=parseInt(curNumJob)+parseInt(inc);
-    console.log($('.tJob').attr('data-job'));
+    console.log($('#sortContainer').attr('data-job'));
     console.log(inc);
     if('j'+nextNumJob in workArea){
         $('.job_exercises').html(workArea['j'+nextNumJob].data);
         $('.job_manual').html(workArea['j'+nextNumJob].man);
         noFirstAnswer=workArea['j'+nextNumJob].nofirstanswer;
         $('.light').removeClass('focus');
-        $('.light#'+$('.tJob').attr('data-job')).addClass('focus');
+        $('.light#'+$('#sortContainer').attr('data-job')).addClass('focus');
     }
     else {
         publishJob(nextNumJob);
     }
+}
+
+function publishJob(nj){
+    curDataJob='j'+nj;
+    initTest();
 }
 
 /*reset current job*/
