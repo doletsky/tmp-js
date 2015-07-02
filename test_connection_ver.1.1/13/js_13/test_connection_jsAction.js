@@ -153,14 +153,23 @@ function creatLine( flag ){
         if(noCreatDiagonal==1){
             if(rLine!=0&&cLine!=0)return false;
         }
+        var rl=parseInt(arCord[0])-(rLine/2);
+        var cl=parseInt(arCord[1])-(cLine/2);
         //calc height in %
         var lineHeight=0;
         var rN=1;
+        var heightCorrect=0;/*коэф корректировки по высоте*/
+        var fHalfHeight=0;/*высота до линии*/
+        var sHalfHeight=0;/*высота после линии*/
         if(rLine<0){rN=-1;}
         for(var n=1;n<rLine*rN;n++){
             var idTr=arCord[0]-(n*rN);
-            lineHeight=lineHeight+$('tr.row'+idTr).height();
+            lineHeight=lineHeight+$('tr.row'+idTr).innerHeight();
+            if(idTr<rl){fHalfHeight=fHalfHeight+$('tr.row'+idTr).innerHeight();}
+            if(idTr>rl){sHalfHeight=sHalfHeight+$('tr.row'+idTr).innerHeight();}
         }
+        heightCorrect=($('tr.row'+rl).innerHeight()+sHalfHeight-fHalfHeight)/2;
+        lineHeight = lineHeight+heightCorrect;
         //calc width in %
         var lineWidth=0;
         var cN=1;
@@ -169,8 +178,7 @@ function creatLine( flag ){
             var idTd=arCord[1]-(n*cN);
             lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
         }
-        var rl=parseInt(arCord[0])-(rLine/2);
-        var cl=parseInt(arCord[1])-(cLine/2);
+
         var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
         var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
         var leftCorr=(flineWidth-100)/2;
@@ -187,12 +195,12 @@ function creatLine( flag ){
         });
         if(zero==1){
             $('tr.row'+rl).children('td.col'+cl).css('position','relative');
-            $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+' zeroAnswer" style="left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+            $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
         }
     }
     else{
         $('tr.row'+rl).children('td.col'+cl).css('position','relative');
-        $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+        $('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
     }
         $('.checkItem').addClass('linkItem');
         $('.checkItem').removeClass('checkItem');
