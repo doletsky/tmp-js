@@ -4,10 +4,12 @@ var tableHeight=0;
 var numItem=0;
 var workArea= new Object();
 var curDataJob='j1';
-var ctest=test.job[curDataJob];
+var ctest=new Object();
 
 function initTest(){
-
+    if(curDataJob in test.job){
+        ctest=test.job[curDataJob];
+    }else{return false;}
     var arKeyJobInd=mix(Object.keys(ctest.jobData)); /* mix - вызов функции, перемешивающей правильную послед-ть */
     $("#sortContainer").html('');
     $(".job_exercises").html("<div id='sortContainer' data-job='"+curDataJob+"'></div>");
@@ -16,6 +18,11 @@ function initTest(){
         htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+ctest.jobData[arKeyJobInd[ind]].dataText+'</div>';
     }
     $("#sortContainer").append(htmlInd);
+    onSortable();
+    indicateTrue();
+}
+
+function onSortable(){
     $(function() {
 
         $('#sortContainer').sortable({
@@ -30,7 +37,6 @@ function initTest(){
         });
 
     });
-    indicateTrue();
 }
 
 function mix(ar){
@@ -128,6 +134,7 @@ function rotateJob(inc) {
     console.log(inc);
     if('j'+nextNumJob in workArea){
         $('.job_exercises').html(workArea['j'+nextNumJob].data);
+        if($('#sortContainer').attr('data-answer')!='1'){onSortable();}
         $('.job_manual').html(workArea['j'+nextNumJob].man);
         noFirstAnswer=workArea['j'+nextNumJob].nofirstanswer;
         $('.light').removeClass('focus');
