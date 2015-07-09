@@ -317,7 +317,7 @@ var connection={
         var trueLine=tdOb.children('.line[data-right="true"]').length;
         var error=tdOb.children('.line[data-right="false"]').length;
         var countError=0;
-        if($('.line').length!=ob.children('.tJob').data('count-right')) {error++;countError=$('.line').length-ob.children('.tJob').data('count-right');}
+        if(tdOb.children('.line').length!=ob.children('.tJob').data('count-right')) {error++;countError=tdOb.children('.line').length-ob.children('.tJob').data('count-right');}
         return [trueLine, error, ob.children('.tJob').data('count-right'), ob.children('.tJob').data('job')];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
      },
      viewRightAnswer:  function(){
