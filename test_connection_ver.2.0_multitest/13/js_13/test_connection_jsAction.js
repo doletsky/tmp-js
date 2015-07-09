@@ -71,29 +71,44 @@ var connection={
                         rLine=arCord[0]-rLine;
                         cLine=arCord[1]-cLine;
                     });
+                    var rl=parseInt(arCord[0])-(rLine/2);
+                    var cl=parseInt(arCord[1])-(cLine/2);
                     //calc height in %
                     var lineHeight=0;
                     var rN=1;
+                    var heightCorrect=0;/*коэф корректировки по высоте*/
+                    var fHalfHeight=0;/*высота до линии*/
+                    var sHalfHeight=0;/*высота после линии*/
+                    var paddigCorr=0;
                     if(rLine<0){rN=-1;}
                     for(var n=1;n<rLine*rN;n++){
                         var idTr=arCord[0]-(n*rN);
-                        lineHeight=lineHeight+$('tr.row'+idTr).height();
+                        lineHeight=lineHeight+ob.children('table').children('tbody').children('tr.row'+idTr).innerHeight();
+                        if(idTr<rl){fHalfHeight=fHalfHeight+ob.children('table').children('tbody').children('tr.row'+idTr).innerHeight();}
+                        if(idTr>rl){sHalfHeight=sHalfHeight+ob.children('table').children('tbody').children('tr.row'+idTr).innerHeight();}
+                        paddigCorr=paddigCorr+5;
                     }
+                    heightCorrect=(ob.children('table').children('tbody').children('tr.row'+rl).innerHeight()+sHalfHeight-fHalfHeight)/2;
+                    lineHeight=lineHeight+paddigCorr/2;
+
+
                     //calc width in %
                     var lineWidth=0;
                     var cN=1;
                     if(cLine<0){cN=-1;}
                     for(var n=1;n<cLine*cN;n++){
                         var idTd=arCord[1]-(n*cN);
-                        lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
+                        lineWidth=lineWidth+ob.children('table').children('tbody').children('tr').children('td.col'+idTd).innerWidth();
                     }
-                    var rl=parseInt(arCord[0])-(rLine/2);
-                    var cl=parseInt(arCord[1])-(cLine/2);
+
                     var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
                     var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
                     var leftCorr=(flineWidth-100)/2;
                     ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('width',flineWidth+'%');
                     ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('left','-'+leftCorr+'%');
+                    if(rad!=0){//горизонтальную линию не корректируем
+                        ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('top',heightCorrect+'px');
+                    }
                     ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('transform','rotate('+rad+'rad)');
                 }
             });
@@ -167,13 +182,13 @@ var connection={
             if(rLine<0){rN=-1;}
             for(var n=1;n<rLine*rN;n++){
                 var idTr=arCord[0]-(n*rN);
-                lineHeight=lineHeight+$('tr.row'+idTr).innerHeight();
-                if(idTr<rl){fHalfHeight=fHalfHeight+$('tr.row'+idTr).innerHeight();}
-                if(idTr>rl){sHalfHeight=sHalfHeight+$('tr.row'+idTr).innerHeight();}
+                lineHeight=lineHeight+ob.children('table').children('tbody').children('tr.row'+idTr).innerHeight();
+                if(idTr<rl){fHalfHeight=fHalfHeight+ob.children('table').children('tbody').children('tr.row'+idTr).innerHeight();}
+                if(idTr>rl){sHalfHeight=sHalfHeight+ob.children('table').children('tbody').children('tr.row'+idTr).innerHeight();}
                 paddigCorr=paddigCorr+5;
             }
 
-            heightCorrect=($('tr.row'+rl).innerHeight()+sHalfHeight-fHalfHeight)/2;
+            heightCorrect=(ob.children('table').children('tbody').children('tr.row'+rl).innerHeight()+sHalfHeight-fHalfHeight)/2;
             lineHeight = lineHeight+paddigCorr/2;
             //calc width in %
             var lineWidth=0;
@@ -181,11 +196,11 @@ var connection={
             if(cLine<0){cN=-1;}
             for(var n=1;n<cLine*cN;n++){
                 var idTd=arCord[1]-(n*cN);
-                lineWidth=lineWidth+$('td.col'+idTd).innerWidth();
+                lineWidth=lineWidth+ob.children('table').children('tbody').children('tr').children('td.col'+idTd).innerWidth();
             }
 
             var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
-            var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
+            var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/ob.children('table').children('tbody').children('tr').children('td.col'+cl).innerWidth();
             var leftCorr=(flineWidth-100)/2;
             leftCorr=leftCorr*(-1);
             if(flag==true){
@@ -200,12 +215,12 @@ var connection={
                 });
                 if(zero==1){
                     ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
                 }
             }
             else{
                 ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html($('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
             }
          ob.children('table').children('tbody').children('tr').children('.checkItem').addClass('linkItem');
          ob.children('table').children('tbody').children('tr').children('.checkItem').removeClass('checkItem');
@@ -246,9 +261,8 @@ var connection={
 
         var techCol=this.test.job[nameJob].col-1;
         var widthEven=parseInt((100-(5*techCol))/this.test.job[nameJob].col);
-        //alert(widthEven);
-        ob.children('.tJob tr:first td:even').css('width',widthEven+'%');
-         ob.children('.tJob tr:first td:odd').css('width','5%');
+        ob.children('.tJob').children().children('tr:first').children('td:even').css('width',widthEven+'%');
+        ob.children('.tJob').children().children('tr:first').children('td:odd').css('width','5%');
         var arKeyJob=Object.keys(this.test.job);
         if(num<1)return false;
         if(num>arKeyJob.length)return false;
@@ -265,9 +279,9 @@ var connection={
                 var r=1+2*(key-1);
                 var c=1+2*(id-1);
                 var e= ob.children('table').children('tbody').children('tr.row'+r).children('td.col'+c);
-                e.html(curRJob[id].dataText);
+                e.html(curRJob[id].dataText);//console.log(this);
                 if('dataImg' in curRJob[id]){
-                    e.html(curRJob[id].dataText+'<img src="'+this.imgDir+curRJob[id].dataImg+'" width="100%">');
+                    e.html(curRJob[id].dataText+'<img src="'+this.test.imgDir+curRJob[id].dataImg+'" width="100%">');
                 }
                 e.attr('data-type',curRJob[id].dataType);
                 if(curRJob[id].dataType=='q'){
@@ -299,11 +313,12 @@ var connection={
      controlJob: function(ob){
         if(ob.children('.tJob').attr('data-answer')==1)return false;//lock if answering yet
          ob.children('.tJob').attr('data-answer','1');
-        var trueLine=$('.line[data-right="true"]').length;
-        var error=$('.line[data-right="false"]').length;
+         tdOb=ob.children('.tJob').children().children().children();
+        var trueLine=tdOb.children('.line[data-right="true"]').length;
+        var error=tdOb.children('.line[data-right="false"]').length;
         var countError=0;
-        if($('.line').length!=$('.tJob').data('count-right')) {error++;countError=$('.line').length-$('.tJob').data('count-right');}
-        return [trueLine, error, $('.tJob').data('count-right'), $('.tJob').data('job')];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
+        if($('.line').length!=ob.children('.tJob').data('count-right')) {error++;countError=$('.line').length-ob.children('.tJob').data('count-right');}
+        return [trueLine, error, ob.children('.tJob').data('count-right'), ob.children('.tJob').data('job')];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
      },
      viewRightAnswer:  function(){
         var idJob=$('.tJob').data('job');
