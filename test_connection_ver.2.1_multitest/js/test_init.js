@@ -41,6 +41,7 @@ $(document).ready(function(){
         });
 
         controlDiv.children('.check_your').on('click',function(){
+            if(arTests[testName].method.noFirstAnswer==0)return false;
         var contr=arTests[testName].method.controlJob(exer);/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
             if(contr==false)return false;
             if(contr[0]==contr[2] && contr[1]==0){
