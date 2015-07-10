@@ -3,11 +3,29 @@
 }
 .job_exercises table {
     margin: 2px;
+	border: 0px;
     width: 99%;
  }
+
+
+ .job_exercises thead tr td {
+font-weight:bold;
+padding-bottom: 15px;
+ }
+ 
 .job_exercises table td {
     /*border: 1px solid grey;*/
+	border: 0px;
     padding: 5px;
+	border-radius: 10px;
+}
+
+.job_exercises p {
+    text-align: center;
+	  margin-top: 0em !important;
+  margin-bottom: 0em !important;
+  text-indent: 0em;
+  font-size: 0.95em;
 }
 
 .active{
@@ -22,7 +40,7 @@
 }
 
 .line {
-    background-color: red;
+    background-color: #60bc57;
     height: 2px;
     position: absolute;
     top: 50%;

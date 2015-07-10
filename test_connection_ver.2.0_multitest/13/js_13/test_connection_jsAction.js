@@ -281,7 +281,18 @@ var connection={
                 var e= ob.children('table').children('tbody').children('tr.row'+r).children('td.col'+c);
                 e.html(curRJob[id].dataText);//console.log(this);
                 if('dataImg' in curRJob[id]){
-                    e.html(curRJob[id].dataText+'<img src="'+this.test.imgDir+curRJob[id].dataImg+'" width="100%">');
+                    e.html('<img src="'+this.test.imgDir+curRJob[id].dataImg.src+'"><p>'+curRJob[id].dataText+'</p>');
+                    if('width' in curRJob[id].dataImg){
+                        if(curRJob[id].dataImg.width.length>0){
+                            e.children('img').css('width',curRJob[id].dataImg.width);
+                        }
+                    }
+                    if('height' in curRJob[id].dataImg){
+                        if(curRJob[id].dataImg.height.length>0){
+                            e.children('img').css('height',curRJob[id].dataImg.height);
+                        }
+                    }
+
                 }
                 e.attr('data-type',curRJob[id].dataType);
                 if(curRJob[id].dataType=='q'){
