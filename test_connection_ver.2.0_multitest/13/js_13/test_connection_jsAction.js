@@ -109,7 +109,7 @@ var connection={
                     if(rad!=0){//горизонтальную линию не корректируем
                         ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('top',heightCorrect+'px');
                     }
-                    ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('transform','rotate('+rad+'rad)');
+                    ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('-webkit-transform','rotate('+rad+'rad)');
                 }
             });
         },
@@ -207,7 +207,7 @@ var connection={
                 var zero=1;
                 ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).children('div.line').each(function(){
 
-                    if($(this).attr('style')=='left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);'){
+                    if($(this).attr('style')=='left:'+leftCorr+'%;width:'+flineWidth+'%;-webkit-transform:rotate('+rad+'rad);'){
                         $(this).addClass('rightAnswer');
                         zero=0;
                     }
@@ -215,12 +215,12 @@ var connection={
                 });
                 if(zero==1){
                     ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;-webkit-transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
                 }
             }
             else{
                 ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;-webkit-transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
             }
          ob.children('table').children('tbody').children('tr').children('.checkItem').addClass('linkItem');
          ob.children('table').children('tbody').children('tr').children('.checkItem').removeClass('checkItem');
