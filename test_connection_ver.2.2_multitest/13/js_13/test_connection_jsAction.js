@@ -102,6 +102,7 @@ var connection={
                     }
 
                     var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
+                    var grad=rad*360/6.28;
                     var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/$('td.col'+cl).innerWidth();
                     var leftCorr=(flineWidth-100)/2;
                     ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('width',flineWidth+'%');
@@ -109,7 +110,7 @@ var connection={
                     if(rad!=0){//горизонтальную линию не корректируем
                         ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('top',heightCorrect+'px');
                     }
-                    ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).css('-webkit-transform','rotate('+rad+'rad)');
+                    ob.children('table').children('tbody').children('tr').children('td').children('div.'+arNum[nd]).rotate(grad); //css('-webkit-transform','rotate('+rad+'rad)');
                 }
             });
         },
@@ -200,6 +201,7 @@ var connection={
             }
 
             var rad=Math.atan2(lineHeight*rN, lineWidth*cN);
+            var grad=rad*360/6.28;
             var flineWidth=100*Math.sqrt((lineWidth*lineWidth)+(lineHeight*lineHeight))/ob.children('table').children('tbody').children('tr').children('td.col'+cl).innerWidth();
             var leftCorr=(flineWidth-100)/2;
             leftCorr=leftCorr*(-1);
@@ -207,7 +209,7 @@ var connection={
                 var zero=1;
                 ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).children('div.line').each(function(){
 
-                    if($(this).attr('style')=='left:'+leftCorr+'%;width:'+flineWidth+'%;-webkit-transform:rotate('+rad+'rad);'){
+                    if($(this).attr('style')=='left:'+leftCorr+'%;width:'+flineWidth+'%;'){
                         $(this).addClass('rightAnswer');
                         zero=0;
                     }
@@ -215,12 +217,14 @@ var connection={
                 });
                 if(zero==1){
                     ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;-webkit-transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+' zeroAnswer" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;" data-right="'+rightLink+'"></div>');
+                    ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).children('div.num'+this.numItem).rotate(grad);
                 }
             }
             else{
                 ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).css('position','relative');
-                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;-webkit-transform:rotate('+rad+'rad);" data-right="'+rightLink+'"></div>');
+                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html(ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).html()+'<div class="line num'+this.numItem+'" style="top:'+heightCorrect+'px;left:'+leftCorr+'%;width:'+flineWidth+'%;" data-right="'+rightLink+'"></div>');
+                ob.children('table').children('tbody').children('tr.row'+rl).children('td.col'+cl).children('div.num'+this.numItem).rotate(grad);
             }
          ob.children('table').children('tbody').children('tr').children('.checkItem').addClass('linkItem');
          ob.children('table').children('tbody').children('tr').children('.checkItem').removeClass('checkItem');
