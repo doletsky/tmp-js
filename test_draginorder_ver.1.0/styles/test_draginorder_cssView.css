@@ -8,3 +8,6 @@
     cursor: pointer;
     background-color: #ffffff;
 }
+.border-red{
+    border: 2px solid red;
+}

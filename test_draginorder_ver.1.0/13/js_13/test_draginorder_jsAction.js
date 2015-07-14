@@ -31,6 +31,14 @@ var draginorder={
         }
         ob.children("#sortContainer").append(htmlInd);
             var meth=this;
+            ob.children('#sortContainer').addClass('ui-droppable');
+            ob.children('#sortContainer').children().droppable({
+                tolerance:"touch",
+                over:function(event, ui){console.log(this);},
+                hoverClass:"border-red"
+
+            });
+            //ob.children('#sortContainer').children().draggable();
             ob.children('#sortContainer').sortable({
                 update: function(event, ui) {
                     console.log(meth);
@@ -40,8 +48,17 @@ var draginorder={
                         ob.parent('div').parent('div').children('div.head').children(".check_your").css({"background": "url('../styles/img/5.png') no-repeat", "background-size":"auto 100%"});
                     }
                 },
+//                start:function( event, ui ) {
+//                    //console.log(ui.item);
+//                    ui.item.removeClass('moving');
+//
+//                },
+//                stop:function( event, ui ) {
+//                    ui.item.addClass('moving');
+//                },
+                axis:"y",
                 containment: "parent",
-                tolerance: "touch"
+                tolerance: "pointer"
             });
 
         this.indicateTrue(ob);
