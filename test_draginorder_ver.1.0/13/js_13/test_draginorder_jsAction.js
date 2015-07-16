@@ -1,3 +1,17 @@
+jQuery.fn.swap = function(b) {
+    b = jQuery(b)[0];
+    var a = this[0],
+        a2 = a.cloneNode(true),
+        b2 = b.cloneNode(true),
+        stack = this;
+
+    a.parentNode.replaceChild(b2, a);
+    b.parentNode.replaceChild(a2, b);
+
+    stack[0] = a2;
+    return this.pushStack( stack );
+};
+
 var draginorder={
     /*инициализация функционала теста*/
     screenResol:0,
@@ -20,45 +34,86 @@ var draginorder={
                     if('width' in obImg){if(obImg.width.length>0)styleImg=styleImg+"width:"+obImg.width+";";}
                     if('height' in obImg){if(obImg.height.length>0)styleImg=styleImg+"height:"+obImg.height+";";}
                     styleImg=styleImg+'"';
-                    htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+'<img src="'+this.test.imgDir+obImg.src+'"'+styleImg+'><p>'+this.test.jobData[arKeyJobInd[ind]].dataText+'</p></div>';
+                    htmlInd+='<div id="fitem'+ind+'" class="droppable"><div class="fon">'+'<img src="'+this.test.imgDir+obImg.src+'"'+styleImg+'><p>'+this.test.jobData[arKeyJobInd[ind]].dataText+'</p></div><div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+'<img src="'+this.test.imgDir+obImg.src+'"'+styleImg+'><p>'+this.test.jobData[arKeyJobInd[ind]].dataText+'</p></div></div>';
                 }
             }
             else
             {
-                htmlInd+='<div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+this.test.jobData[arKeyJobInd[ind]].dataText+'</div>';
+                htmlInd+='<div id="fitem'+ind+'" class="droppable"><div class="fon">'+this.test.jobData[arKeyJobInd[ind]].dataText+'</div><div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+this.test.jobData[arKeyJobInd[ind]].dataText+'</div></div>';
             }
 
         }
         ob.children("#sortContainer").append(htmlInd);
             var meth=this;
+        var mXY={};
+        var flag={over:0,change:0};
+        var drag={};
+        ob.children('#sortContainer').mousemove(function(e){mXY=e;});
             ob.children('#sortContainer').addClass('ui-droppable');
-            ob.children('#sortContainer').children().droppable({
+        ob.children('#sortContainer').children().children('div.sortable').draggable({
+            axis: "y",
+            containment:"#sortContainer",
+            start: function(event, ui){
+                drag.html=$(this).parent().html();
+                drag.id=$(this).parent().attr('id');
+                drag.fon=$(this).parent().children('.fon').html();
+                $(this).parent().height($(this).parent().children('.fon').height());
+                $(this).parent().children('.fon').remove();
+                $(this).css('z-index','999');
+            },
+            stop: function(event, ui){
+                $(this).remove();
+                ob.children('#sortContainer').children('#'+drag.id).html(drag.html);
+                ob.children('#sortContainer').children('#'+drag.id).children('.sortable').draggable("disable");
+            }
+        });
+            ob.children('#sortContainer').children('div.droppable').droppable({
+                containment: "parent",
+                accept:".sortable",
                 tolerance:"touch",
-                over:function(event, ui){console.log(this);},
+                over:function(event, ui)
+                {
+//                    var emptCont=$(ui.draggable[0]).parent('div');
+//                    console.log($(this).children().attr('id'));
+//                    console.log($(ui.draggable[0]).attr('id'));
+//                    if($(this).children().attr('id')!=$(ui.draggable[0]).attr('id'))
+//                    {
+////
+//                        el=$(ui.draggable[0]).after($(this).html());
+//                        el.css('top',0);
+//                        $(ui.draggable[0]).css('position','absolute');
+//                        var hEmpt=$(this).height();
+//                        console.log($(this).height());
+//                        $(this).html($(ui.draggable[0]));
+////                        $(this).height(hEmpt);
+//
+//                        $(ui.draggable[0]).css('top',parseInt($(ui.draggable[0]).css('top'))+40+'px');
+////                        ui.position.top=parseInt($(ui.draggable[0]).css('top'))+40;
+////                        ui.offset.top=ui.offset.top+40;
+//                    }
+////                    console.log($(this).offset().top);
+//                    $(ui.draggable[0]).css('z-index','999');
+//////                    $(this).offset({top:$(ui.draggable).offset().top});
+////                    $(this).offset({top:$(this).offset().top+20});
+////                    console.log($(this).offset().top);
+////                    drag=this;
+//                    flag.f=1;
+////                    el=$(ui.draggable[0]).after($(this).removeClass('border-red'));
+////                    $(ui.draggable[0]).offset({top:$(ui.draggable[0]).offset().top+40});
+////                    el.removeAttr('style');
+////                    el.droppable( "enable" );
+////                    $(this).remove();
+////                    $(ui.draggable[0]).removeAttr('style');
+////                    $(ui.draggable[0]).mouseup();
+
+                },
+                drop:function(event, ui)
+                {
+                    console.log(this);
+                    console.log(ui);
+                },
                 hoverClass:"border-red"
 
-            });
-            //ob.children('#sortContainer').children().draggable();
-            ob.children('#sortContainer').sortable({
-                update: function(event, ui) {
-                    console.log(meth);
-                    meth.indicateTrue(ob);
-                    if(meth.test.noFirstAnswer==0){
-                        noFirstAnswer=1;
-                        ob.parent('div').parent('div').children('div.head').children(".check_your").css({"background": "url('../styles/img/5.png') no-repeat", "background-size":"auto 100%"});
-                    }
-                },
-//                start:function( event, ui ) {
-//                    //console.log(ui.item);
-//                    ui.item.removeClass('moving');
-//
-//                },
-//                stop:function( event, ui ) {
-//                    ui.item.addClass('moving');
-//                },
-                axis:"y",
-                containment: "parent",
-                tolerance: "pointer"
             });
 
         this.indicateTrue(ob);
