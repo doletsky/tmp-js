@@ -51,22 +51,22 @@ var draginorder={
         ob.children('#sortContainer').mousemove(function(e){mXY=e;});
             ob.children('#sortContainer').addClass('ui-droppable');
         ob.children('#sortContainer').children().children('div.sortable').draggable({
-            axis: "y",
-            containment:"#sortContainer",
-            start: function(event, ui){
-                drag.html=$(this).parent().html();
-                drag.id=$(this).parent().attr('id');
-                drag.fon=$(this).parent().children('.fon').html();
-                $(this).parent().height($(this).parent().children('.fon').height());
-                $(this).parent().children('.fon').remove();
-                $(this).css('z-index','999');
-            },
-            stop: function(event, ui){
-                $(this).remove();
-                ob.children('#sortContainer').children('#'+drag.id).html(drag.html);
-                ob.children('#sortContainer').children('#'+drag.id).children('.sortable').draggable("disable");
-            }
-        });
+                axis: "y",
+                containment:"#sortContainer",
+                start: function(event, ui){
+                    drag.html=$(this).parent().html();
+                    drag.id=$(this).parent().attr('id');
+                    drag.fon=$(this).parent().children('.fon').html();
+                    $(this).parent().height($(this).parent().children('.fon').height());
+                    $(this).parent().children('.fon').remove();
+                    $(this).css('z-index','999');
+                },
+                stop: function(event, ui){
+                    ob.children('#sortContainer').children('#'+drag.id).append($(this).clone());
+//                    ob.children('#sortContainer').children('#'+drag.id).children('.sortable').draggable("disable");
+                }
+            });
+
             ob.children('#sortContainer').children('div.droppable').droppable({
                 containment: "parent",
                 accept:".sortable",
@@ -74,10 +74,12 @@ var draginorder={
                 over:function(event, ui)
                 {
 //                    var emptCont=$(ui.draggable[0]).parent('div');
-//                    console.log($(this).children().attr('id'));
-//                    console.log($(ui.draggable[0]).attr('id'));
-//                    if($(this).children().attr('id')!=$(ui.draggable[0]).attr('id'))
-//                    {
+                    console.log($(this).children('.sortable').attr('id'));
+                    console.log($(ui.draggable[0]).attr('id'));
+                    if($(this).children('.sortable').attr('id')!=$(ui.draggable[0]).attr('id'))
+                    {
+                     drag.id=$(this).attr('id');
+                    }
 ////
 //                        el=$(ui.draggable[0]).after($(this).html());
 //                        el.css('top',0);
@@ -107,11 +109,11 @@ var draginorder={
 ////                    $(ui.draggable[0]).mouseup();
 
                 },
-                drop:function(event, ui)
-                {
-                    console.log(this);
-                    console.log(ui);
-                },
+//                drop:function(event, ui)
+//                {
+//                    console.log(this);
+//                    console.log(ui);
+//                },
                 hoverClass:"border-red"
 
             });
