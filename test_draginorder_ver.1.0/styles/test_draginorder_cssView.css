@@ -1,15 +1,16 @@
 .job_exercises {
     text-align: center;
 }
+#sortContainer{
+    position: relative;
+}
 .sortable {
-    border: 1px solid grey;
-    padding: 2px;
+    border: 1px solid green;
     cursor: pointer;
     background-color: #ffffff;
     width: 100%;
     position: absolute;
     top:-1px;
-    left: -1px;
     z-index: 99;
 }
 .droppable
@@ -17,6 +18,8 @@
     position: relative;
     border: 1px solid grey;
     margin-bottom: 10px;
+    width: 100%;
+    z-index: 1;
 }
 .border-red{
     border: 2px solid red;

@@ -34,35 +34,42 @@ var draginorder={
                     if('width' in obImg){if(obImg.width.length>0)styleImg=styleImg+"width:"+obImg.width+";";}
                     if('height' in obImg){if(obImg.height.length>0)styleImg=styleImg+"height:"+obImg.height+";";}
                     styleImg=styleImg+'"';
-                    htmlInd+='<div id="fitem'+ind+'" class="droppable"><div class="fon">'+'<img src="'+this.test.imgDir+obImg.src+'"'+styleImg+'><p>'+this.test.jobData[arKeyJobInd[ind]].dataText+'</p></div><div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+'<img src="'+this.test.imgDir+obImg.src+'"'+styleImg+'><p>'+this.test.jobData[arKeyJobInd[ind]].dataText+'</p></div></div>';
+                    htmlInd+='<div id="fitem'+arKeyJobInd[ind]+'" class="droppable"></div><div id="item'+arKeyJobInd[ind]+'" class="sortable moving" data-stay="fitem'+arKeyJobInd[ind]+'">'+'<img src="'+this.test.imgDir+obImg.src+'"'+styleImg+'><p>'+this.test.jobData[arKeyJobInd[ind]].dataText+'</p></div>';
                 }
             }
             else
             {
-                htmlInd+='<div id="fitem'+ind+'" class="droppable"><div class="fon">'+this.test.jobData[arKeyJobInd[ind]].dataText+'</div><div id="item'+arKeyJobInd[ind]+'" class="sortable moving">'+this.test.jobData[arKeyJobInd[ind]].dataText+'</div></div>';
+                htmlInd+='<div id="fitem'+arKeyJobInd[ind]+'" class="droppable"></div><div id="item'+arKeyJobInd[ind]+'" class="sortable moving" data-stay="fitem'+arKeyJobInd[ind]+'">'+this.test.jobData[arKeyJobInd[ind]].dataText+'</div>';
             }
 
         }
         ob.children("#sortContainer").append(htmlInd);
+        ob.children("#sortContainer").children('.sortable').each(function(){
+            var did=$(this).attr('id').slice(4);
+            ob.children("#sortContainer").children('#fitem'+did).height($(this).height()); console.log(ob.children("#sortContainer").children('#fitem'+did).position().top);
+            $(this).css('top',ob.children("#sortContainer").children('#fitem'+did).position().top);
+        });
+
             var meth=this;
         var mXY={};
         var flag={over:0,change:0};
         var drag={};
         ob.children('#sortContainer').mousemove(function(e){mXY=e;});
-            ob.children('#sortContainer').addClass('ui-droppable');
-        ob.children('#sortContainer').children().children('div.sortable').draggable({
+//            ob.children('#sortContainer').addClass('ui-droppable');
+        ob.children('#sortContainer').children('div.sortable').draggable({
                 axis: "y",
                 containment:"#sortContainer",
                 start: function(event, ui){
-                    drag.html=$(this).parent().html();
-                    drag.id=$(this).parent().attr('id');
-                    drag.fon=$(this).parent().children('.fon').html();
-                    $(this).parent().height($(this).parent().children('.fon').height());
-                    $(this).parent().children('.fon').remove();
+//                    drag.html=$(this).parent().html();
+//                    drag.id=$(this).parent().attr('id');
+//                    drag.fon=$(this).parent().children('.fon').html();
+//                    $(this).parent().height($(this).parent().children('.fon').height());
+//                    $(this).parent().children('.fon').remove();
                     $(this).css('z-index','999');
                 },
                 stop: function(event, ui){
-                    ob.children('#sortContainer').children('#'+drag.id).append($(this).clone());
+                    $(this).css('z-index','99');
+//                    ob.children('#sortContainer').children('#'+drag.id).append($(this).clone());
 //                    ob.children('#sortContainer').children('#'+drag.id).children('.sortable').draggable("disable");
                 }
             });
@@ -74,8 +81,8 @@ var draginorder={
                 over:function(event, ui)
                 {
 //                    var emptCont=$(ui.draggable[0]).parent('div');
-                    console.log($(this).children('.sortable').attr('id'));
-                    console.log($(ui.draggable[0]).attr('id'));
+                    console.log($(this));
+                    console.log($(ui.draggable).attr('id'));
                     if($(this).children('.sortable').attr('id')!=$(ui.draggable[0]).attr('id'))
                     {
                      drag.id=$(this).attr('id');
