@@ -33,9 +33,9 @@ $(document).ready(function(){
         });
 
         /*дополнения для размещения в уроке*/
-        controlDiv.children('.drop').on('click', function(){
+        controlDiv.children('.drop').on('click', function(){console.log(arTests[testName].method.noFirstAnswer);
             if(arTests[testName].method.noFirstAnswer==0)return false;
-            //console.log($(this));
+
             arTests[testName].method.resetCurJob(exer, arTests[testName].clickTrue);
             controlDiv.children(".result").css("background","none");
         });

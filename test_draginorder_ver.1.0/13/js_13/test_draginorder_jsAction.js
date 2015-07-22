@@ -57,6 +57,7 @@ var draginorder={
                     $(this).addClass('moving');
                     meth.updateTopHeight(ob, 1);
                     meth.indicateTrue(ob);
+                    console.log(meth.test);
                 }
             });
 //        var obCur=ob;
