@@ -8,17 +8,20 @@
     border: 1px solid green;
     cursor: pointer;
     background-color: #ffffff;
-    width: 100%;
+    width: 99%;
     position: absolute;
     top:-1px;
     z-index: 99;
+}
+.sortable img {
+    margin-top: 10px;
 }
 .droppable
 {
     position: relative;
     border: 1px solid grey;
     margin-bottom: 10px;
-    width: 100%;
+    width: 99%;
     z-index: 1;
 }
 .border-red{

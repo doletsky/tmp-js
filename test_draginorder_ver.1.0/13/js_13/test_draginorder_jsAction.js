@@ -30,16 +30,15 @@ var draginorder={
             }
 
         }
-        ob.children("#sortContainer").append(htmlInd);
+        ob.children("#sortContainer").html(htmlInd);
         setTimeout(function(){
             meth.updateTopHeight(ob, 1);
+            if(ob.css('overflow')){
+                ob.css('height',ob.height());
+                ob.css('overflow','hidden');
+            }
             meth.indicateTrue(ob);
         },100);
-//        ob.children("#sortContainer").children('.sortable').each(function(){
-//            var did=$(this).attr('id').slice(4);
-//            ob.children("#sortContainer").children('#fitem'+did).height($(this).height());
-//            $(this).css('top',ob.children("#sortContainer").children('#fitem'+did).position().top);
-//        });
 
         var mXY={};
         var flag={over:0,change:0};
@@ -57,17 +56,18 @@ var draginorder={
                     $(this).addClass('moving');
                     meth.updateTopHeight(ob, 1);
                     meth.indicateTrue(ob);
-                    console.log(meth.test);
+                    if(meth.noFirstAnswer==0){
+                        meth.noFirstAnswer=1;
+                        ob.parent().parent().children('.head').children(".check_your").css({"background": "url('../styles/img/5.png') no-repeat", "background-size":"auto 100%"});
+                    }
                 }
             });
-//        var obCur=ob;
         ob.children('#sortContainer').children('div.droppable').droppable({
                 containment: "parent",
                 accept:".sortable",
                 tolerance:"touch",
                 over:function(event, ui)
                 {
-//                    var obCur=$(this).parent('div').parent();
                     if($(this).attr('id')!=$(ui.draggable).attr('data-stay'))
                     {
                         var moveId=$(this).attr("id");
@@ -77,18 +77,12 @@ var draginorder={
                         meth.updateTopHeight(ob, 1);
                     }
                 }
-//                drop:function(event, ui)
-//                {
-//                    console.log(this);
-//                    console.log(ui);
-//                },
-//                hoverClass:"border-red"
 
         });
 
 
     },
-    mix: function(ar){console.log('--------------------');console.log(ar);
+    mix: function(ar){
         var newAr=[];
         var tmpAr=[];
         var max=0;
@@ -97,7 +91,7 @@ var draginorder={
             var oldAr=ar;
             for(var i=0;i<ar.length-1;i++){
                 max=oldAr.length-1;
-                randNum=Math.floor(Math.random() * (max  + 1));console.log(randNum);
+                randNum=Math.floor(Math.random() * (max  + 1));
                 newAr[newAr.length]=oldAr[randNum];
                 for(var j=0;j<oldAr.length;j++){
                    if(j!=randNum) tmpAr[tmpAr.length]=oldAr[j];
@@ -108,7 +102,7 @@ var draginorder={
             newAr[newAr.length]=oldAr[0];
         }else{
             newAr=ar;
-        }console.log(newAr);
+        }
         return newAr;
     },
     indicateTrue: function(ob){
@@ -134,13 +128,14 @@ var draginorder={
         return 0;
     },
     controlJob: function(ob){
+        if(this.noFirstAnswer==0)return false;
         if(ob.children('#sortContainer').attr('data-answer')==1)return false;//lock if answering yet
         ob.children('#sortContainer').attr('data-answer','1');
         var trueLine=ob.children().children('.sortable[data-right="true"]').length;
         var error=ob.children().children('.sortable[data-right="false"]').length;
         var countItem=ob.children().children('.sortable').length;
         var countError=error;
-        ob.children('#sortContainer').unbind();$('.sortable').unbind();
+        ob.children('#sortContainer').children('.sortable').unbind();
         return [trueLine, error, countItem, countItem];/*кол-во верных, кол-во неверных, д.б. верных, id задания*/
     },
     updateTopHeight: function(ob, full){
@@ -160,19 +155,27 @@ var draginorder={
             ob.children("#sortContainer").children('.sortable').each(function(){
                 var did=$(this).attr('data-stay');
                 ob.children("#sortContainer").children('#'+did).height($(this).height());
-//                ob.children("#sortContainer").children('#'+did).animate({height:$(this).height()}, 500);
             });
             ob.children("#sortContainer").children('.sortable').each(function(){
 
                 if(!$(this).hasClass('ui-draggble-dragging')){
                     var did=$(this).attr('data-stay');
                     $(this).animate({top:ob.children("#sortContainer").children('#'+did).position().top}, 200);
-//                    $(this).css('top',ob.children("#sortContainer").children('#'+did).position().top);
                 }
 
             });
         }
 
+    },
+    resetCurJob: function(ob){
+        this.initTest(ob);
+    },
+    resizeTestWin: function(ob){
+        var meth=this;
+            setTimeout(function(){
+                meth.updateTopHeight(ob, 1);
+                ob.css('height',ob.children().height()+2);
+            },100);
     }
 }
 
